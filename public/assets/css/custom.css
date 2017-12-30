@@ -1,0 +1,78 @@
+body {
+	margin: 0 auto;
+}
+
+#modal {
+	z-index: 2;
+	position: absolute;
+	display: none;
+	top: 100px;
+	bottom: 100px;
+	left: 100px;
+	right: 100px;
+}
+
+#overlay {
+	z-index: 2;
+	background-color: #000;
+	opacity: 0.50;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	display: none;
+}
+
+/*h1, h2, h3, h4, h5, h6 {
+	font-family: 'Century Gothic' !important;
+}*/
+
+.full-height {
+	height: 100vh;
+}
+
+.full-width {
+	width: 100%;
+}
+
+
+.hero-shot {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)), url('../../img/hero-shot.jpeg');;
+	background-position: center;
+	background-size: cover;
+}
+
+.login-form {
+	width: 40%;
+}
+
+.login-fields-container {
+	margin-top: 10px;
+	padding: 20px 40px;
+}
+
+.enroll-form {
+	width: 65%;
+}
+
+.enroll-fields-container {
+	margin-top: 10px;
+	padding: 0 10px 10px 10px;
+}
+
+form.enroll-form input, form.login-form input, form.enroll-form select {
+	background: transparent;
+	padding: 5px;
+	border-width: 2px; 
+}
+
+.fields {
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.margin-lr-20 {
+	margin: 0 20px;
+	display: inline-block;
+}

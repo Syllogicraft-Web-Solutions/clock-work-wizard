@@ -1,0 +1,22 @@
+body {
+	margin: 0 auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: 'Century Gothic' !important;
+}
+
+.full-height {
+	height: 100vh;
+}
+
+.full-width {
+	width: 100%;
+}
+
+
+.hero-shot {
+	background-image: linear-gradient(rgba(0, 0, 0, 0.60), rgba(0, 0, 0, 0.60)), url('../../img/hero-shot.jpeg');;
+	background-position: center;
+	background-size: cover;
+}
