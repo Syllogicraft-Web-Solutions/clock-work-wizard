@@ -2,7 +2,7 @@
 	// var_dump($links); exit();
 ?>
 
-<div id="sidebar" class="w3-sidebar w3-bar-block w3-black <?= isset($options['text_align']) != '' ? 'w3-' . $options['text_align'] : '' ?>" style="width: <?= $options['width'] ?>">
+<div id="sidebar" class="w3-sidebar w3-bar-block w3-theme-d5 <?= isset($options['text_align']) != '' ? 'w3-' . $options['text_align'] : '' ?>" style="width: <?= $options['width'] ?>">
 	<?php 
 		if (sizeof($links) > 0) {
 			foreach ($links as $key => $value) {
@@ -16,7 +16,7 @@
 				else
 					$curr_mod = false;
 			?>
-				<a href="<?= $url ?>" title="<?= $text ?>" class="<?= $curr_mod ? 'w3-theme-light' : '' ?> w3-bar-item w3-button"><i class="fa <?= $icon ?> "></i><?= $show ? '&nbsp;' . $text : '' ?></a>
+				<a href="<?= $url ?>" title="<?= $text ?>" class="w3-hover-theme <?= $curr_mod ? 'w3-theme-light' : '' ?> w3-bar-item w3-button"><i class="fa <?= $icon ?> "></i><?= $show ? '&nbsp;' . $text : '' ?></a>
 			<?php
 			}
 		} else {

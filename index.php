@@ -5,7 +5,7 @@
 	* Change the filename from local to live
 	*
 	*/
-	require_once('application/connection-config/connection-config-dev.php');
+	require_once('application/connection-config/connection-config-local.php');
 
 /**
  * CodeIgniter

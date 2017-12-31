@@ -60,3 +60,12 @@ $route['login'] = "_login";
 $route['dashboard'] = "_dashboard";
 $route['enroll'] = "_enroll";
 $route['users'] = "_users";
+$route['register'] = "_users/register";
+
+
+$route['clock'] = "_clockwork";
+
+
+// $route['admin'] = "_login/index/admin";
+// $route['login'] = "_login/index/employee";
+

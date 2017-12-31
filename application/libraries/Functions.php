@@ -34,14 +34,13 @@ class Functions {
 	}
 
 	// Please use $page variable inside the page you are going to render, if you have a data to pass in it
-	function render_page($start = true, $page_title = "", $js = array(), $link = array(), $meta = array(), $view_file = "", $end = true, $data = []) {
+	function render_page($display_header = false, $page_title = "", $js = array(), $link = array(), $meta = array(), $view_file = "", $data = []) {
 		$CI =& get_instance();
 		$page['page_title'] = $page_title;
 		$page['page'] = $data;
 		$this->sidebar['with_sidebar'] = false;
-		// exit(var_dump($link))
-		if ($start)
-			$CI->load->view('head/html-start.php', $page); //start head tag
+
+		$CI->load->view('head/html-start.php', $page); //start head tag
 		
 		if (sizeof($js) > 0) { // add script tags
 			foreach ($js as $key => $val) {
@@ -61,6 +60,9 @@ class Functions {
 
 		$CI->load->view('head/html-end-head.php'); //end head tag
 
+		if ($display_header)
+			$CI->load->view('components/header-logged-in'); //end head tag
+
 		if (isset($this->sidebar['show'])) {
 			$this->sidebar['with_sidebar'] = true;
 			$this->render_sidebar($CI->globals->get_globals('menu_links'), $this->sidebar['options'], $this->sidebar['current_module_name']);
@@ -75,8 +77,7 @@ class Functions {
 
 		$this->add_modal_overlay();
 
-		if ($end)
-			$CI->load->view('foot/html-end.php'); // end of html
+		$CI->load->view('foot/html-end.php'); // end of html
 
 	}
 
@@ -127,6 +128,9 @@ class Functions {
 		$CI->globals->set_globals($name, $menu_links, 'menu_links', $module_name = '');
 	}
 
+	function add_header_menu($position = false) {
+
+	}
 
 	function add_modal_overlay() {
 		$CI =& get_instance();
