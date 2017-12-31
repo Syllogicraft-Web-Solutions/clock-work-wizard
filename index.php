@@ -2,10 +2,10 @@
 
 	/**
 	*
-	* Chang the filename from local to live
+	* Change the filename from local to live
 	*
 	*/
-	require_once('application/connection-config/connection-config-local.php');
+	require_once('application/connection-config/connection-config-dev.php');
 
 /**
  * CodeIgniter

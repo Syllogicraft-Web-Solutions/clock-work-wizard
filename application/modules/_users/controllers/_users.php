@@ -20,19 +20,13 @@ class _users extends MX_Controller {
 		* Add and set variable for the page here
 		*/
 		$this->page['page_title'] = "Users";
-		$this->page['module_name'] = "_users/";
+		$this->page['module_name'] = $this->router->fetch_class() . '/';
 
-		$this->meta_tags = array(
-			array(
-				'meta_name' => 'Viewport',
-				'name' => 'viewport',
-				'content' => 'width=device-width, initial-scale=1'
-			)
-		);
 		$default_view = $this->init->default_view_vars();
-
 		$this->script_tags = $default_view['scripts'];
 		$this->link_tags = $default_view['links'];
+		$this->meta_tags = $default_view['metas'];
+
 		if ($this->check_user_profile($user_id))
 			header('Location: ' . base_url($this->page['module_name'] . 'edit_profile/' . $user_id));
 	}
@@ -61,6 +55,13 @@ class _users extends MX_Controller {
 		$this->page['assets_url'] = $this->assets;
 		
 		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+		$this->functions->render_page(true, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, true, $this->page);
+	}
+
+	function register() {
+		$view = $this->page['module_name'] . 'register-account';
+		$this->page['assets_url'] = $this->assets;
+
 		$this->functions->render_page(true, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, true, $this->page);
 	}
 }

@@ -73,6 +73,8 @@ class Functions {
 
 		$CI->load->view('the-content/end-content'); // end the content div
 
+		$this->add_modal_overlay();
+
 		if ($end)
 			$CI->load->view('foot/html-end.php'); // end of html
 
@@ -123,6 +125,14 @@ class Functions {
 		);
 		$CI->load->library('globals');
 		$CI->globals->set_globals($name, $menu_links, 'menu_links', $module_name = '');
+	}
+
+
+	function add_modal_overlay() {
+		$CI =& get_instance();
+
+		$CI->load->view('components/modal');
+		$CI->load->view('components/overlay');
 	}
 
 	function add_script($script_name, $src = '', $type = "", $attrs = array()) {

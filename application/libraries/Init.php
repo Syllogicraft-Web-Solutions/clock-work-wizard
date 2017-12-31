@@ -21,7 +21,6 @@ class Init extends Functions {
 
 		// add more links here
 		$this->add_menu('dashboard', false, base_url() . 'dashboard', 'fa-home', 'Dashboard', 'dashboard');
-		$this->add_menu('enroll', false, base_url() . 'enroll', 'fa-plus', 'Enroll', 'enroll');
 		$this->add_menu('users', false, base_url() . 'users', 'fa-user', 'User', 'users');
 		$this->add_menu('logout', false, base_url() . '_login/do_logout', 'fa-power-off', 'Logout', '');
 	}
@@ -84,6 +83,70 @@ class Init extends Functions {
 				'href' => $this->assets . 'fontawesome/web/css/fontawesome-all.min.css'
 			)
 		);
-		return array('scripts' => $script_tags, 'links' => $link_tags);
+		$meta_tags = array(
+			array(
+				'meta_name' => 'Viewport',
+				'name' => 'viewport',
+				'content' => 'width=device-width, initial-scale=1'
+			)
+		);
+		return array('scripts' => $script_tags, 'links' => $link_tags, 'metas' => $meta_tags);
+	}
+
+	function load_admin_vars() {
+		$this->script_tags = array(
+			array(
+				'script_name' => 'jQuery',
+				'src' => $this->assets . 'jquery/jquery-3.2.1.min.js',
+				'type' => '',
+				'attrs' => array()
+			), array(
+				'script_name' => 'jQuery Migrate Plugin',
+				'src' => $this->assets . 'jquery/jquery-migrate-1.4.1.min.js',
+				'type' => '',
+				'attrs' => array()
+			), array(
+				'script_name' => 'jQuery UI',
+				'src' => $this->assets . 'jquery-ui-custom/jquery-ui.min.js',
+				'type' => '',
+				'attrs' => array()
+			)
+		);
+		$this->link_tags = array(
+			array(
+				'link_name' => 'W3.CSS',
+				'rel' => '',
+				'type' => '',
+				'href' => $this->assets . 'w3-css/4-w3.css'
+			),
+			array(
+				'link_name' => 'W3.CSS Theme',
+				'rel' => '',
+				'type' => '',
+				'href' => $this->assets . 'css/theme.css'
+			), array(
+				'link_name' => 'Custom Stylings',
+				'rel' => '',
+				'type' => '',
+				'href' => $this->assets . 'css/custom.css'
+			), array(
+				'link_name' => 'jQuery UI CSS',
+				'rel' => '',
+				'type' => '',
+				'href' => $this->assets . 'jquery-ui-custom/jquery-ui.min.css'
+			), array(
+				'link_name' => 'FontAwesome 5',
+				'rel' => '',
+				'type' => '',
+				'href' => $this->assets . 'fontawesome/web/css/fontawesome-all.min.css'
+			)
+		);
+		$this->meta_tags = array(
+			array(
+				'meta_name' => 'Viewport',
+				'name' => 'viewport',
+				'content' => 'width=device-width, initial-scale=1'
+			)
+		);
 	}
 }
