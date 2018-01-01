@@ -33,6 +33,14 @@ class Functions {
 		echo "nyeam";
 	}
 
+	function encrypt_data($data) {
+		return $encrypted;
+	}
+
+	function decrypt_data($data) {
+		return $dencrypted;
+	}
+
 	// Please use $page variable inside the page you are going to render, if you have a data to pass in it
 	function render_page($display_header = false, $page_title = "", $js = array(), $link = array(), $meta = array(), $view_file = "", $data = []) {
 		$CI =& get_instance();

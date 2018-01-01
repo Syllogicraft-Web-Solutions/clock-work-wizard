@@ -59,20 +59,27 @@ class _users extends MX_Controller {
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
+
 	function register() {
-		$referral = isset($_GET['referral']);
-
-		if (! $referral)
-			exit("You need a referral");
-
 		$view = $this->page['module_name'] . 'register-account';
 		$this->page['assets_url'] = $this->assets;
 
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
-	function add_employee() {
+	function register_employee() {
+		$referral = isset($_GET['referral']);
 
+		// if (! $referral)
+		// 	exit("You need a referral");
+
+		$view = $this->page['module_name'] . 'register-employee';
+		$this->page['assets_url'] = $this->assets;
+
+		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+	}
+
+	function add_employee() {
 		$view = $this->page['module_name'] . 'add-employee';
 		$this->page['assets_url'] = $this->assets;
 
