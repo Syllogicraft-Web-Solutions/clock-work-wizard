@@ -37,8 +37,8 @@
 				<input class="w3-input w3-border-theme" type="password" name="password">
 				<br>
 			</div>
-			<div class="w3-center w3-margin-bottom w3-right">
-				<button class="w3-button w3-ripple w3-theme-d1 w3-hover-theme w3-theme-action" name="login" value="login">Login</button> 
+			<div class="w3-center w3-margin-bottom w3-right w3-block">
+				<button class="w3-button w3-right w3-half w3-ripple w3-theme-d1 w3-hover-theme w3-theme-action" name="login" value="login">Login</button> 
 			</div>
 		</form>
 	</div>
