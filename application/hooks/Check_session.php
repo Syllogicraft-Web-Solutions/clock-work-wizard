@@ -15,17 +15,34 @@ class Check_session {
     }
     public function validate() {
 
-        // exit($this->router->fetch_class())
+        $exceptions['class'] = array(
+            '_login', '_default'
+        );
 
+        $exceptions['method'] = array(
+            'register', 'sample', 'username_check', 'email_check'
+        );
 
-        // $this->session->unset_userdata('redirect_here');
+        foreach ($exceptions['class'] as $key => $value) {
+            if ($this->router->fetch_class() == $value) {
+                // echo $value;
+                return;
+            }
+        }
 
-        if ($this->router->fetch_class() == '_login' || $this->router->fetch_class() == '_default' || $this->session->userdata('user_cookie'))//login is a sample login controller {
+        foreach ($exceptions['method'] as $key => $value) {
+            if ($this->router->fetch_method() == $value) {
+                // echo $value;
+                return;
+            }
+        }
+
+        if ($this->session->userdata('user_cookie')['id'] != NULL) {
             return;
+        }
 
         if (! $this->session->userdata('user_cookie')) {
             header('Location: ' . base_url('login') . '?ref=' . $this->session->userdata('redirect_here')) ;
-            // $this->session->set_userdata('redirect_here', urlencode((isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"));
         }
     }
 }

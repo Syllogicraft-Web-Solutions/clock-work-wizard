@@ -7,14 +7,14 @@ class __globalmodule extends MX_Controller {
 		parent::__construct();
 	}
 
-	public function get_tablename() {
-		$this->load->model('__globalmodel');
-		return $this->__globalmodel->tablename;
-	}
-
 	public function set_tablename($table) {
 		$this->load->model('__globalmodel');
 		$this->__globalmodel->set_tablename($table);
+	}
+
+	public function get_tablename() {
+		$this->load->model('__globalmodel');
+		return $this->__globalmodel->tablename;
 	}
 
 	public function get($order_by) {
@@ -43,7 +43,7 @@ class __globalmodule extends MX_Controller {
 
 	public function _insert($data) {
 		$this->load->model('__globalmodel');
-		$this->__globalmodel->_insert($data);
+		return $this->__globalmodel->_insert($data);
 	}
 
 	public function _update($id, $data) {

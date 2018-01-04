@@ -53,24 +53,41 @@ class _login extends MX_Controller {
 		if ($data['login'] != "") {
 			$this->$global->set_tablename('users');
 			$tablename = $this->$global->get_tablename();
-			$query = "SELECT * FROM $tablename WHERE user_login = \"{$data['username']}\" AND user_password = \"{$data['password']}\" LIMIT 1";
+			// $query = "SELECT * FROM $tablename WHERE user_login = \"{$data['username']}\" AND user_password = \"{$data['password']}\" LIMIT 1";
+			$query = "SELECT * FROM $tablename WHERE user_login = \"{$data['username']}\" LIMIT 1";
 
 			$row = $this->$global->_custom_query($query);
 			if ($row->result()) {
 				foreach ($row->result() as $key => $val) {
+
 					if ($val->user_status == 0) {
-						return;
+						$login_status = array(
+							'code' => 'invalid_acc',
+							'message' => 'User not activated, please check your email inbox or spam to activate your account.'
+						);
+						return $login_status;
 					}
-					$this->session->set_userdata('user_cookie', array(
-						'logged_in' => true,
-						'id' => $val->id
-					));
-					$this->session->unset_userdata('redirect_here');
-					if (isset($_GET['ref']) != '')
-						header('Location: ' .  urldecode($_GET['ref']));
-					redirect(base_url() . '_dashboard/', 'location');
+
+					if ($this->functions->compare_encrypted_data($this->encryption->encrypt($data['password']), $val->user_password)) {
+						$this->session->set_userdata('user_cookie', array(
+							'logged_in' => true,
+							'id' => $val->id
+						));
+						$this->session->unset_userdata('redirect_here');
+						if (isset($_GET['ref']) != '') {
+							header('Location: ' .  urldecode($_GET['ref']));
+							exit();
+						}
+						redirect(base_url() . '_dashboard/', 'location');
+					} else {
+						$login_status = array(
+							'code' => 'invalid_acc',
+							'message' => 'Wrong password.'
+						);
+						return $login_status;
+					}
+					return true;
 				}
-				return true;
 			} else {
 				$login_status = array(
 					'code' => 'invalid_acc',

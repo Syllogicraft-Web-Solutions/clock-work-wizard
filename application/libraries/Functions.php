@@ -7,6 +7,13 @@ class Functions {
 	var $page;
 	var $sidebar;
 
+
+	/**
+	*
+	* Frontend Functions
+	*
+	*/
+
 	/**
 	 * @param $start - true if you want to render the start of the HTML document
 	 * @param $page_title - the title of the page
@@ -31,14 +38,6 @@ class Functions {
 	 */
 	function index() {
 		echo "nyeam";
-	}
-
-	function encrypt_data($data) {
-		return $encrypted;
-	}
-
-	function decrypt_data($data) {
-		return $dencrypted;
 	}
 
 	// Please use $page variable inside the page you are going to render, if you have a data to pass in it
@@ -193,4 +192,33 @@ class Functions {
 		$CI->load->view('tags/meta-tag.php', $meta_tag);
 		// return ob_get_clean();
 	}
+
+
+	/**
+	*
+	* Backend Functions
+	*
+	*/
+	function encrypt_data($data) {
+		$CI =& get_instance();
+		$encrypted = $CI->encryption->encrypt($data);
+		return $encrypted;
+	}
+
+	function decrypt_data($data) {
+		$CI =& get_instance();
+		$decrypted = $CI->encryption->decrypt($data);
+		return $decrypted;
+	}
+
+	function compare_encrypted_data($data1, $data2) {
+		$data1 = $this->decrypt_data($data1);
+		$data2 = $this->decrypt_data($data2);
+
+		if ($data1 == $data2)
+			return true;
+		else
+			return false;
+	}
+
 }

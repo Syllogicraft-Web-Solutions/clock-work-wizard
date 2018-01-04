@@ -17,7 +17,7 @@ class __globalmodel extends CI_Model {
 	}
 
 	function get_table() {
-		$table = $this->$tablename;
+		$table = $this->tablename;
 		return $table;
 	}
 
@@ -52,7 +52,7 @@ class __globalmodel extends CI_Model {
 
 	function _insert($data) {
 		$table = $this->get_table();
-		$this->db->insert($table, $data);
+		return $this->db->insert($table, $data);
 	}
 
 	function _update($id, $data) {
