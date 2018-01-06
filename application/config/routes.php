@@ -62,6 +62,7 @@ $route['enroll'] = "_enroll";
 $route['users'] = "_users";
 $route['register'] = "_users/register";
 
+$route['verify-account'] = '_users/activate_account';
 
 $route['clock'] = "_clockwork";
 

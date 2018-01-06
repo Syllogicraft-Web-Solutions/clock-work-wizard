@@ -20,7 +20,7 @@ class Check_session {
         );
 
         $exceptions['method'] = array(
-            'register', 'sample', 'username_check', 'email_check'
+            'register', 'sample', 'username_check', 'email_check', 'activate_account'
         );
 
         foreach ($exceptions['class'] as $key => $value) {
