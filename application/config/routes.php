@@ -60,13 +60,12 @@ $route['login'] = "_login";
 $route['dashboard'] = "_dashboard";
 $route['enroll'] = "_enroll";
 $route['users'] = "_users";
+
 $route['register'] = "_users/register";
+$route['register/complete'] = "_users/registration_complete";
+$route['register/failed'] = "_users/registration_failed";
+$route['register/account-activated'] = "_users/account_activated";
+
 
 $route['verify-account'] = '_users/activate_account';
-
-$route['clock'] = "_clockwork";
-
-
-// $route['admin'] = "_login/index/admin";
-// $route['login'] = "_login/index/employee";
-
+$route['display-page'] = '__globalmodule/display_page';

@@ -14,14 +14,10 @@ class Check_session {
         return get_instance()->$property;
     }
     public function validate() {
-
-        $exceptions['class'] = array(
-            '_login', '_default'
-        );
-
-        $exceptions['method'] = array(
-            'register', 'sample', 'username_check', 'email_check', 'activate_account'
-        );
+        $this->config->load('exceptions');
+        $execs = $this->config->item('exceptions');
+        $exceptions['class'] = $execs['classes'];
+        $exceptions['method'] = $execs['methods'];
 
         foreach ($exceptions['class'] as $key => $value) {
             if ($this->router->fetch_class() == $value) {

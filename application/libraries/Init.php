@@ -14,10 +14,7 @@ class Init extends Functions {
 		$this->assets = base_url() . 'public/assets/';
 	}
 
-	function display_menu_links() {
-		// $CI &= get_instance();
-		// $CI->load->library('functions');
-		
+	function display_menu_links() {		
 		// add more links here
 		$this->add_menu('dashboard', false, base_url() . 'dashboard', 'fa-home', 'Dashboard', 'dashboard');
 		$this->add_menu('users', false, base_url() . 'users', 'fa-user', 'User', 'users');
@@ -30,7 +27,7 @@ class Init extends Functions {
 		$CI->load->library('session');
 		$curr_class = $CI->router->fetch_class();
 		if ($curr_class == '_login' || $curr_class == '_default' || $CI->session->userdata('user_cookie'))
-			return; //echo $CI->router->fetch_class();// 
+			return;
 		$CI->session->set_userdata('redirect_here', urlencode((isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"));
 	}
 

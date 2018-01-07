@@ -51,7 +51,6 @@ class _users extends MX_Controller {
 	}
 
 	function activate_account() {
-
 		if (isset($_GET['activation_key']) && $_GET['activation_key']) {
 			$raw_ak = $_GET['activation_key'];
 			$verify = $_GET['activation_key'];
@@ -75,7 +74,7 @@ class _users extends MX_Controller {
 				$data['user_status'] = 1;
 
 				$this->__globalmodule->_update($id, $data);
-				header('Location: ' . base_url('login'));
+				header('Location: ' . base_url('register/account-activated'));
 			} else {
 				header('Location: ' . base_url('login'));
 			}
@@ -85,22 +84,22 @@ class _users extends MX_Controller {
 		}
 	}
 
+	function account_activated() {
+		echo "Your account is activated, you can now login and use Clock Work Wizard using your account.";
+	}
+
 	function send_email_activation($user_activation_key, $email, $nickname) {
-
-
-
 		// Storing submitted values
 		$sender_email = 'johnabeman@gmail.com';
 		$user_password = '09467035106';
-		$receiver_email = 'abelardomanangan@gmail.com';
-		$username = 'abelardomanangan';
-		$subject = 'Sample';
-		$message = "
-			<h1>
-				Click the link for account activation.
-			</h1>
-			<a href='" . base_url('verify-account/?activation_key=' . urlencode($user_activation_key)) . "'>Verify your account now.</a>
-		";
+		$receiver_email = $email;
+		$from_name = 'Clock Work Wizard';
+		$subject = 'Activate your account now - ' . $from_name;
+
+		$data['activation_key'] = $user_activation_key;
+		$data['nickname'] = $nickname;
+		$data['link'] = base_url('verify-account?activation_key=' . $user_activation_key);
+		$message = $this->__globalmodule->read_email_template('activation-link', 'read', $data);
 
 		// Configure email library
 		$config['protocol'] = 'smtp';
@@ -116,7 +115,7 @@ class _users extends MX_Controller {
 		$this->email->set_newline("\r\n");
 
 		// Sender email address
-		$this->email->from($sender_email, $username);
+		$this->email->from($sender_email, $from_name);
 		// Receiver email address
 		$this->email->to($receiver_email);
 		// Subject of email
@@ -130,7 +129,11 @@ class _users extends MX_Controller {
 	}
 
 	function register() {
-		 // echo (extension_loaded('openssl')?'SSL loaded':'SSL not loaded')."\n";
+		// $data['activation_key'] = "nyeam";
+		// $data['nickname'] = "jimboniyahahha";
+		// $data['link'] = base_url('verify-account?activation_key=' . $data['activation_key']);
+		// echo $this->__globalmodule->read_email_template('activation-link', 'read', $data);
+		// exit();
 		$view = $this->page['module_name'] . 'register-account';
 		$this->page['page_title'] = "Sign Up for a new account.";
 		$this->page['assets_url'] = $this->assets;
@@ -146,12 +149,17 @@ class _users extends MX_Controller {
 				$this->__globalmodule->set_tablename('users');
 				if ($this->send_email_activation($data['user_activation_key'], $data['user_email'], $data['user_nickname'])) {
 					if ($this->__globalmodule->_insert($data) == 1) {
-						$view = $this->page['module_name'] . 'congratulations-page';
-						// $this->send_email_activation($data['user_activation_key'], $data['user_email'], $data['user_nickname']);
-						$this->functions->render_page(false, 'Successful sign up', $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+						// $view = $this->page['module_name'] . 'congratulations-page';
+						// // $this->send_email_activation($data['user_activation_key'], $data['user_email'], $data['user_nickname']);
+						// $this->functions->render_page(false, 'Successful sign up', $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+						header('Location: ' . base_url('register/complete'));
+						exit();
 					}
-				    else
-				    	$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+				    else {
+						header('Location: ' . base_url('register/complete'));
+						exit();
+				    	// $this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+				    }
 				}
 			    return;
 			} else {
@@ -161,6 +169,14 @@ class _users extends MX_Controller {
 		}
 
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+	}
+
+	function registration_complete() {
+		echo "Registration complete";
+	}
+
+	function registration_failed() {
+		echo "Unable to register please try again";
 	}
 
 	function register_employee() {

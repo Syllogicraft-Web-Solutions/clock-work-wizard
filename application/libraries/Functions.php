@@ -193,6 +193,22 @@ class Functions {
 		// return ob_get_clean();
 	}
 
+	function view_exists($file = "", $module = false, $module_name = '') {
+		if ($module) {
+		    if (file_exists(APPPATH . "modules/{$module_name}/views/{$file}" . EXT)) {
+		        return true;
+		    }
+		    else
+		        return false;
+		} else {
+		    if (file_exists(APPPATH . "views/{$file}" . EXT)) {
+		        return true;
+		    }
+		    else
+		        return false;
+		}
+
+	}
 
 	/**
 	*

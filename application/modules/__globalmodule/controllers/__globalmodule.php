@@ -79,4 +79,50 @@ class __globalmodule extends MX_Controller {
 		$this->load->model('__globalmodel');
 		$this->__globalmodel->_insert_batch($data);
 	}
+
+
+
+
+	/**
+	* 
+	* Non-database functions
+	*
+	*/
+	function read_email_template($filename, $type = "", $data = array()) {
+		// use key 'http' even if you send the request to https://...
+		$options = array('http' => array(
+		    'method'  => 'POST',
+		    'content' => http_build_query($data)
+		));
+		$context  = stream_context_create($options);
+
+		if ($type == 'render') {
+			$email =  @file_get_contents(base_url('display-page?p=' . urlencode('email/' . $filename)), false, $context);
+			echo $email != false ? $email : '';
+		} else if ($type == 'read') {
+			$email = @file_get_contents(base_url('display-page?p=' . urlencode('email/' . $filename)), false, $context);
+			return $email;
+		}
+	}
+
+	function display_page() {
+		if (! (isset($_GET['p']) && $_GET['p'])) {
+			show_404();
+			return;
+		}
+
+		if (! $this->functions->view_exists($_GET['p'])) {
+			show_404();
+			return;
+		}
+
+		if (sizeof($_POST) > 0) {
+			$data = $_POST;
+			$this->load->view($_GET['p'], $data);
+		} else {
+			$this->load->view($_GET['p']);
+		}
+
+	}
+
 }
