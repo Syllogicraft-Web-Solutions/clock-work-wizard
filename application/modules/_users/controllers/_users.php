@@ -156,12 +156,14 @@ class _users extends MX_Controller {
 						exit();
 					}
 				    else {
-						header('Location: ' . base_url('register/complete'));
+						header('Location: ' . base_url('register/failed'));
 						exit();
 				    	// $this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 				    }
 				}
-			    return;
+				header('Location: ' . base_url('register/failed'));
+				exit();
+			    // return;
 			} else {
 				$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 				return;

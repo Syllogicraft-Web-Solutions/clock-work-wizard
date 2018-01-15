@@ -17,7 +17,8 @@ class Init extends Functions {
 	function display_menu_links() {		
 		// add more links here
 		$this->add_menu('dashboard', false, base_url() . 'dashboard', 'fa-home', 'Dashboard', 'dashboard');
-		$this->add_menu('users', false, base_url() . 'users', 'fa-user', 'User', 'users');
+		$this->add_menu('users', false, base_url() . 'users', 'fa-user', 'Users', 'users');
+		$this->add_menu('options', false, base_url('options'), 'fa-cogs', 'Options', '');
 		$this->add_menu('logout', false, base_url() . '_login/do_logout', 'fa-power-off', 'Logout', '');
 	}
 

@@ -60,6 +60,7 @@ $route['login'] = "_login";
 $route['dashboard'] = "_dashboard";
 $route['enroll'] = "_enroll";
 $route['users'] = "_users";
+$route['options'] = "_options";
 
 $route['register'] = "_users/register";
 $route['register/complete'] = "_users/registration_complete";
