@@ -77,7 +77,7 @@ class __globalmodule extends MX_Controller {
 
 	public function _insert_batch($data) {
 		$this->load->model('__globalmodel');
-		$this->__globalmodel->_insert_batch($data);
+		return $this->__globalmodel->_insert_batch($data);
 	}
 
 

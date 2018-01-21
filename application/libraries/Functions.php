@@ -35,6 +35,7 @@ class Functions {
 	 *					'content' => $content
 	 *				  );
 	 * @param $view_loc = location of the view
+	 * @param $data = the data that will be passed inside the view
 	 */
 	function index() {
 		echo "nyeam";
@@ -235,6 +236,117 @@ class Functions {
 			return true;
 		else
 			return false;
+	}
+
+	// For Options module
+	function add_option($option_name, $option_value, $user_id) {
+
+		$value = json_encode($option_value);
+
+		// $data['owner_id']
+		$data['owner_id'] = $user_id;
+		$data['option_name'] = $option_name;
+		$data['option_value'] = $value;
+
+		if (! $this->option_exists($option_name, $user_id)) {
+			$this->__globalmodule->set_tablename('options');
+			return $this->__globalmodule->_insert($data);
+		} else {
+			return;
+		}
+	}
+
+	function option_exists($option_name, $user_id) {
+
+		if ($this->get_option($option_name, $user_id) != '') {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	function get_option($option_name, $user_id = '') {
+
+		if ( $user_id != '' ) {
+			$current_user_id = $this->user_id;
+		}
+
+		$this->__globalmodule->set_tablename('options');
+		$table = $this->__globalmodule->get_tablename();
+
+		$query = "SELECT option_value FROM $table WHERE option_name = '$option_name'";
+
+		$query .= $user_id ? " AND owner_id = " . $current_user_id : "";
+
+		$query .= " LIMIT 1 ";
+
+		$data = $this->__globalmodule->_custom_query($query)->result();
+
+		if (sizeof($data) < 1)
+			return "";
+
+		foreach ($data as $key => $value) {
+			$data = $value->option_value;
+		}
+
+		return json_decode($data);
+	}
+
+
+	// For Users module
+	function add_user_meta($meta_name, $meta_value, $user_id) {
+
+		$value = json_encode($meta_value);
+
+		// $data['owner_id']
+		$data['owner_id'] = $user_id;
+		$data['meta_name'] = $meta_name;
+		$data['meta_value'] = $value;
+
+		if (! $this->option_exists($meta_name, $user_id)) {
+			$this->__globalmodule->set_tablename('options');
+			return $this->__globalmodule->_insert($data);
+		} else {
+			return;
+		}
+	}
+
+	function user_meta_exists($meta_name, $user_id) {
+
+		if ($this->get_option($meta_name, $user_id) != '') {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+
+	function get_user_meta($meta_name, $user_id = '') {
+
+		if ( $user_id != '' ) {
+			$current_user_id = $this->user_id;
+		}
+
+		$this->__globalmodule->set_tablename('options');
+		$table = $this->__globalmodule->get_tablename();
+
+		$query = "SELECT meta_value FROM $table WHERE meta_name = '$meta_name'";
+
+		$query .= $user_id ? " AND owner_id = " . $current_user_id : "";
+
+		$query .= " LIMIT 1 ";
+
+		$data = $this->__globalmodule->_custom_query($query)->result();
+
+		if (sizeof($data) < 1)
+			return "";
+
+		foreach ($data as $key => $value) {
+			$data = $value->meta_value;
+		}
+
+		return json_decode($data);
 	}
 
 }

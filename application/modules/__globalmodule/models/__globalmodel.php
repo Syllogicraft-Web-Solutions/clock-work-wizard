@@ -99,6 +99,6 @@ class __globalmodel extends CI_Model {
 
 	function _insert_batch($data) {
 		$table = $this->get_table();
-		$this->db->insert_batch($table, $data);
+		return $this->db->insert_batch($table, $data);
 	}
 }

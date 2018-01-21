@@ -1,5 +1,11 @@
 <?php
 	defined('BASEPATH') OR exit('No direct script access allowed');
+
+	if (isset($page['error_register'])) {
+?>
+			<input type="hidden" id="error_message" value='<?= json_encode($page['error_register']) ?>'>
+<?php
+	}
 ?>
 
 
@@ -15,7 +21,7 @@
 			<div class="enroll-fields-container w3-container">
 				<p id="message_container" style="display: none"></p>
 				<label>Nickname</label>
-				<input class="w3-input w3-border-theme" type="text" name="user_nickname" required>
+				<input class="w3-input w3-border-theme" type="text" value="<?php if (isset($page['submitted_post']['user_nickname'])) echo $page['submitted_post']['user_nickname']; ?>" name="user_nickname" required>
 				<br>
 				<!-- <label>Last Name</label>
 				<input class="w3-input w3-border-theme" type="text" name="last_name" required>
@@ -24,10 +30,10 @@
 				<input class="w3-input w3-border-theme" type="text" name="first_name" required>
 				<br> -->
 				<label>Email</label>
-				<input class="w3-input w3-border-theme" type="email" name="user_email" required>
+				<input class="w3-input w3-border-theme" type="email" value="<?php if (isset($page['submitted_post']['user_email'])) echo $page['submitted_post']['user_email']; ?>" name="user_email" required>
 				<br>
 				<label>Username</label>
-				<input class="w3-input w3-border-theme" type="text" name="user_login" required>
+				<input class="w3-input w3-border-theme" type="text" value="<?php if (isset($page['submitted_post']['user_login'])) echo $page['submitted_post']['user_login']; ?>" name="user_login" required>
 				<br>
 				<label>Password</label>
 				<input id="password" class="w3-input w3-border-theme" type="password" name="user_password" required>
@@ -43,6 +49,25 @@
 	</div>
 	
 </section>
+<script>
+	
+	jQuery(document).ready(function() {
+		var error = jQuery('#error_message');
+		if (error.length > 0) {
+			err = JSON.parse(error.val());
+			console.log(err);
+			icon = '<i class="fa fa-exclamation" aria-hidden="true"></i> &nbsp; &nbsp;';
+			mess = '';
+			jQuery('#message_container').css({'color': '#E74C3C', 'margin': '0 auto 20px 0'});
+			for (var i = 0; i < err.length; i++) {
+				mess += '<p>' + icon + err[i] + '</p>';
+			}
+			jQuery('#message_container').html(mess);
+			jQuery('#message_container').fadeIn();
+		}
+	});
+
+</script>
 
 <script>
 	var pw = jQuery('#password');

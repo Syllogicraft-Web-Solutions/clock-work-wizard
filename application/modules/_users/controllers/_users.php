@@ -74,24 +74,27 @@ class _users extends MX_Controller {
 				$data['user_status'] = 1;
 
 				$this->__globalmodule->_update($id, $data);
+				$this->add_default_meta_key($id);
 				header('Location: ' . base_url('register/account-activated'));
 			} else {
 				header('Location: ' . base_url('login'));
 			}
-
 		} else {
 			show_404();
 		}
 	}
 
 	function account_activated() {
-		echo "Your account is activated, you can now login and use Clock Work Wizard using your account.";
+		$page['page_title'] = "Account has been Activated";
+		$page['assets_url'] = $this->assets;
+		$view = $this->page['module_name'] . 'account-activated.php';
+		$this->functions->render_page(false, $page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
 	}
 
 	function send_email_activation($user_activation_key, $email, $nickname) {
 		// Storing submitted values
-		$sender_email = 'johnabeman@gmail.com';
-		$user_password = '09467035106';
+		// $sender_email = 'johnabeman@gmail.com';
+		// $user_password = '09467035106';
 		$receiver_email = $email;
 		$from_name = 'Clock Work Wizard';
 		$subject = 'Activate your account now - ' . $from_name;
@@ -102,13 +105,18 @@ class _users extends MX_Controller {
 		$message = $this->__globalmodule->read_email_template('activation-link', 'read', $data);
 
 		// Configure email library
-		$config['protocol'] = 'smtp';
-		$config['smtp_host'] = 'smtp.gmail.com';
-		$config['smtp_port'] = 587;
-		$config['smtp_user'] = $sender_email;
-		$config['smtp_pass'] = $user_password;
-		$config['mailtype'] = 'html';
-    	$config['smtp_crypto'] = 'tls';
+		// $config['protocol'] = 'smtp';
+		// $config['smtp_host'] = 'smtp.gmail.com';
+		// $config['smtp_port'] = 587;
+		// $config['smtp_user'] = $sender_email;
+		// $config['smtp_pass'] = $user_password;
+		// $config['mailtype'] = 'html';
+  		// $config['smtp_crypto'] = 'tls';
+
+  		$this->config->load('email');
+  		$config = $this->config->item('mail');
+  		// exit(var_dump($config));
+
 
 		// Load email library and passing configured values to email library
 		$this->load->library('email', $config);
@@ -129,66 +137,96 @@ class _users extends MX_Controller {
 	}
 
 	function register() {
-		// $data['activation_key'] = "nyeam";
-		// $data['nickname'] = "jimboniyahahha";
-		// $data['link'] = base_url('verify-account?activation_key=' . $data['activation_key']);
-		// echo $this->__globalmodule->read_email_template('activation-link', 'read', $data);
-		// exit();
 		$view = $this->page['module_name'] . 'register-account';
 		$this->page['page_title'] = "Sign Up for a new account.";
 		$this->page['assets_url'] = $this->assets;
 
 		if (isset($_POST['register']) == 'register') {
-			$data = $_POST;
-			unset($data['register']);
-			unset($data['confirm_password']);
-			$data['user_password'] = $this->functions->encrypt_data($data['user_password']);
-			$data['user_activation_key'] = $this->functions->encrypt_data($data['user_email'] . '|' . $data['user_login']);
+			if (! $this->is_email_exists($_POST['user_email']) && ! $this->is_username_exists($_POST['user_login'])) {
+				$data = $_POST;
+				unset($data['register']);
+				unset($data['confirm_password']);
+				$data['user_password'] = $this->functions->encrypt_data($data['user_password']);
+				$data['user_activation_key'] = $this->functions->encrypt_data($data['user_email'] . '|' . $data['user_login']);
 
-			if (! empty(array_filter($data))) {
-				$this->__globalmodule->set_tablename('users');
-				if ($this->send_email_activation($data['user_activation_key'], $data['user_email'], $data['user_nickname'])) {
-					if ($this->__globalmodule->_insert($data) == 1) {
-						// $view = $this->page['module_name'] . 'congratulations-page';
-						// // $this->send_email_activation($data['user_activation_key'], $data['user_email'], $data['user_nickname']);
-						// $this->functions->render_page(false, 'Successful sign up', $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
-						header('Location: ' . base_url('register/complete'));
-						exit();
+				if (! empty(array_filter($data))) {
+					$this->__globalmodule->set_tablename('users');
+					if ($this->send_email_activation($data['user_activation_key'], $data['user_email'], $data['user_nickname'])) {
+						if ($this->__globalmodule->_insert($data) == 1) {
+							header('Location: ' . base_url('register/complete'));
+							exit();
+						}
+					    else {
+							header('Location: ' . base_url('register/failed'));
+							exit();
+					    }
 					}
-				    else {
-						header('Location: ' . base_url('register/failed'));
-						exit();
-				    	// $this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
-				    }
+					header('Location: ' . base_url('register/failed'));
+					exit();
+				} else {
+					$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+					return;
 				}
-				header('Location: ' . base_url('register/failed'));
-				exit();
-			    // return;
 			} else {
-				$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
-				return;
+				if ($this->is_email_exists($_POST['user_email']))
+					$this->page['error_register'][] = "Email address already taken by another user.";
+
+				if ($this->is_username_exists($_POST['user_login']))
+					$this->page['error_register'][] = "Username is already taken.";
+
+				$this->page['submitted_post'] = $_POST;
 			}
 		}
 
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
+	function is_email_exists($email) {
+		$this->__globalmodule->set_tablename('users');
+		$table = $this->__globalmodule->get_tablename();
+
+		$sql = "SELECT user_email FROM $table WHERE user_email = '$email'";
+		$result = $this->__globalmodule->_custom_query($sql)->result();
+
+		if (sizeof($result) > 0)
+			return true;
+		else
+			return false;
+	}
+
+	function is_username_exists($username) {
+		$this->__globalmodule->set_tablename('users');
+		$table = $this->__globalmodule->get_tablename();
+
+		$sql = "SELECT user_login FROM $table WHERE user_login = '$username'";
+		$result = $this->__globalmodule->_custom_query($sql)->result();
+
+		if (sizeof($result) > 0)
+			return true;
+		else
+			return false;
+	}
+
 	function registration_complete() {
-		echo "Registration complete";
+		$page['page_title'] = "Successfully Signed Up";
+		$page['assets_url'] = $this->assets;
+		$view = $this->page['module_name'] . 'congratulations-page.php';
+		$this->functions->render_page(false, $page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
 	}
 
 	function registration_failed() {
-		echo "Unable to register please try again";
+		$page['page_title'] = "Registration Failed";
+		$page['assets_url'] = $this->assets;
+		$view = $this->page['module_name'] . 'registration-failed.php';
+		$this->functions->render_page(false, $page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
 	}
 
-	function register_employee() {
+	/*function register_employee() {
 		$referral = isset($_GET['referral']);
-
 		$view = $this->page['module_name'] . 'register-employee';
 		$this->page['assets_url'] = $this->assets;
-
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
-	}
+	}*/
 
 	function add_employee() {
 		$view = $this->page['module_name'] . 'add-employee';
@@ -239,33 +277,42 @@ class _users extends MX_Controller {
 			), array(
 				'user_id' => $id,
 				'meta_key' => 'status'
-			), array(
-				'user_id' => $id,
-				'meta_key' => 'clock_status',
-				'meta_value' => '0'
 			)
 		);
+		$this->__globalmodule->set_tablename('user_meta');
+		$this->__globalmodule->_insert_batch($user_meta_keys);
 
 		if ($this->session->userdata('user_cookie')['id'] != NULL || $manager != '') {
-			$manager = array(
-				'meta_key' => 'manager',
-				'meta_value' => $manager
+			$user_meta_keys = array(
+				array(
+					'user_id' => $id,
+					'meta_key' => 'clock_status',
+					'meta_value' => '0'
+				), array(
+					'user_id' => $id,
+					'meta_key' => 'manager',
+					'meta_value' => $manager
+				), array(
+					'user_id' => $id,
+					'meta_key' => 'user_role',
+					'meta_value' => 'employee'
+				)
 			);
-			$capability = array(
-				'meta_key' => 'capability',
-				'meta_value' => 'employee'
-			);
-			array_push($user_meta_keys, $manager);
-			array_push($user_meta_keys, $capability);
+			$this->__globalmodule->_insert_batch($user_meta_keys);
 		} else {
-			$capability = array(
-				'meta_key' => 'capability',
-				'meta_value' => 'manager'
+			$user_meta_keys = array(
+				array(
+					'user_id' => $id,
+					'meta_key' => 'clock_status',
+					'meta_value' => '0'
+				), array(
+					'user_id' => $id,
+					'meta_key' => 'user_role',
+					'meta_value' => 'manager'
+				)
 			);
-			array_push($user_meta_keys, $capability);
+			$this->__globalmodule->_insert_batch($user_meta_keys);
 		}
-		echo '<pre>';
-		var_dump($user_meta_keys);
 	}
 
 	function username_check($username) {
