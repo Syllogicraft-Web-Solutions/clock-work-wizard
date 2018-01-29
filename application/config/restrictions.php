@@ -3,11 +3,24 @@
 defined('BASEPATH') OR exit("No direct script access allowed");
 
 $classes = array(
-	'allow_to' => array('admin');
+	'admin' => array(
+	),
+	'manager' => array(
+		'_options', '_plugins'
+	),
+	'employee' => array(
+		'_options', '_plugins'
+	)	
 );
 
 $methods = array(
-	''
+	'admin' => array(
+	),
+	'manager' => array(
+	),
+	'employee' => array(
+		'add_employee'
+	)
 );
 
 $config['restrictions']['classes'] = $classes;

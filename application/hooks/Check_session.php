@@ -13,6 +13,7 @@ class Check_session {
         }
         return get_instance()->$property;
     }
+    
     public function validate() {
         $this->config->load('exceptions');
         $execs = $this->config->item('exceptions');

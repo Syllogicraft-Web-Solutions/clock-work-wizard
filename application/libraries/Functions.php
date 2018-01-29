@@ -122,7 +122,7 @@ class Functions {
 			$this->sidebar = array('current_module_name' => str_replace('/', '', $current_module_name), 'show' => false, 'options' => $options);
 	}
 
-	function add_menu($name, $show_name, $url, $icon, $text, $module_name = '') {
+	function add_menu($name, $show_name, $url, $icon, $text, $module_name = '', $restrict_displaying = true) {
 		$CI =& get_instance();
 
 		$menu_links = array(
@@ -132,6 +132,26 @@ class Functions {
 			'text' => $text,
 			'module_name' => $module_name
 		);
+
+		if ($restrict_displaying) {
+		   	$CI->config->load('restrictions');
+	        $restrictions = $CI->config->item('restrictions');
+
+	        $user_id = $CI->session->userdata('user_cookie')['id'];
+	        if ($user_id == '')
+	        	return;
+	        $role = $this->get_user_role($user_id);
+
+	        $classes = $restrictions['classes'][$role];
+	        $methods = $restrictions['methods'][$role];
+
+	        if (in_array($module_name, $classes))
+	        	return;
+
+	        if (in_array($module_name, $methods))
+	        	return;
+	    }
+
 		$CI->load->library('globals');
 		$CI->globals->set_globals($name, $menu_links, 'menu_links', $module_name = '');
 	}
@@ -238,6 +258,15 @@ class Functions {
 			return false;
 	}
 
+    public function is_logged_in() {
+    	$CI =& get_instance();
+
+       	if ($CI->session->has_userdata('user_cookie'))
+            return true;
+        else
+            return false;
+    }
+
 	// For Options module
 	function add_option($option_name, $option_value, $user_id) {
 
@@ -295,16 +324,16 @@ class Functions {
 
 
 	// For Users module
-	function add_user_meta($meta_name, $meta_value, $user_id) {
+	function add_user_meta($meta_key, $meta_value, $user_id) {
 
 		$value = json_encode($meta_value);
 
 		// $data['owner_id']
 		$data['owner_id'] = $user_id;
-		$data['meta_name'] = $meta_name;
+		$data['meta_key'] = $meta_key;
 		$data['meta_value'] = $value;
 
-		if (! $this->option_exists($meta_name, $user_id)) {
+		if (! $this->option_exists($meta_key, $user_id)) {
 			$this->__globalmodule->set_tablename('options');
 			return $this->__globalmodule->_insert($data);
 		} else {
@@ -312,9 +341,9 @@ class Functions {
 		}
 	}
 
-	function user_meta_exists($meta_name, $user_id) {
+	function user_meta_exists($meta_key, $user_id) {
 
-		if ($this->get_option($meta_name, $user_id) != '') {
+		if ($this->get_option($meta_key, $user_id) != '') {
 			return true;
 		} else {
 			return false;
@@ -322,23 +351,21 @@ class Functions {
 
 	}
 
-	function get_user_meta($meta_name, $user_id = '') {
+	function get_user_meta($meta_key, $user_id) {
+		$CI =& get_instance();
 
-		if ( $user_id != '' ) {
-			$current_user_id = $this->user_id;
-		}
+		$CI->load->module('__globalmodule');
+		$CI->__globalmodule->set_tablename('user_meta');
+		$table = $CI->__globalmodule->get_tablename();
 
-		$this->__globalmodule->set_tablename('options');
-		$table = $this->__globalmodule->get_tablename();
+		$query = "SELECT meta_value FROM $table WHERE meta_key = '$meta_key'";
 
-		$query = "SELECT meta_value FROM $table WHERE meta_name = '$meta_name'";
-
-		$query .= $user_id ? " AND owner_id = " . $current_user_id : "";
+		$query .= " AND user_id = " . $user_id;
 
 		$query .= " LIMIT 1 ";
-
-		$data = $this->__globalmodule->_custom_query($query)->result();
-
+		// exit($query);
+		$data = $CI->__globalmodule->_custom_query($query)->result();
+// var_dump($data);
 		if (sizeof($data) < 1)
 			return "";
 
@@ -348,5 +375,26 @@ class Functions {
 
 		return json_decode($data);
 	}
+
+    public function get_user_role($user_id) { // checks the capability of current user
+
+		$CI =& get_instance();
+
+        $res = $this->get_user_meta('user_role', $user_id);
+
+        if ($res != '') {
+            $query = "SELECT user_meta.meta_value FROM users INNER JOIN user_meta ON users.id = user_meta.user_id WHERE users.id = $user_id AND user_meta.meta_key = 'user_role'";
+
+			$role = $CI->__globalmodule->_custom_query($query)->result();
+			if (sizeof($role) > 0) {
+				foreach ($role as $key => $value) {
+					$res = $value->meta_value;
+				}
+			}
+        }
+
+        return json_decode($res);
+    }
+
 
 }

@@ -31,6 +31,8 @@ class _users extends MX_Controller {
 		$view = $this->page['module_name'] . 'index';
 		$this->page['assets_url'] = $this->assets;
 
+		
+
 		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
@@ -287,15 +289,15 @@ class _users extends MX_Controller {
 				array(
 					'user_id' => $id,
 					'meta_key' => 'clock_status',
-					'meta_value' => '0'
+					'meta_value' => json_encode('0')
 				), array(
 					'user_id' => $id,
 					'meta_key' => 'manager',
-					'meta_value' => $manager
+					'meta_value' => json_encode($manager)
 				), array(
 					'user_id' => $id,
 					'meta_key' => 'user_role',
-					'meta_value' => 'employee'
+					'meta_value' => json_encode('employee')
 				)
 			);
 			$this->__globalmodule->_insert_batch($user_meta_keys);
@@ -304,11 +306,11 @@ class _users extends MX_Controller {
 				array(
 					'user_id' => $id,
 					'meta_key' => 'clock_status',
-					'meta_value' => '0'
+					'meta_value' => json_encode('0')
 				), array(
 					'user_id' => $id,
 					'meta_key' => 'user_role',
-					'meta_value' => 'manager'
+					'meta_value' => json_encode('manager')
 				)
 			);
 			$this->__globalmodule->_insert_batch($user_meta_keys);

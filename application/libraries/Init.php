@@ -18,8 +18,9 @@ class Init extends Functions {
 		// add more links here
 		$this->add_menu('dashboard', false, base_url() . 'dashboard', 'fa-home', 'Dashboard', 'dashboard');
 		$this->add_menu('users', false, base_url() . 'users', 'fa-user', 'Users', 'users');
-		$this->add_menu('options', false, base_url('options'), 'fa-cogs', 'Options', '');
-		$this->add_menu('logout', false, base_url() . '_login/do_logout', 'fa-power-off', 'Logout', '');
+		$this->add_menu('options', false, base_url('options'), 'fa-cogs', 'Options', 'options');
+		$this->add_menu('plugins', false, base_url('plugins'), 'fa-plug', 'Plugins', 'plugins');
+		$this->add_menu('logout', false, base_url() . '_login/do_logout', 'fa-power-off', 'Logout', '_login');
 	}
 
 	public function redirect_url_save() {

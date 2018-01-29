@@ -61,6 +61,7 @@ $route['dashboard'] = "_dashboard";
 $route['enroll'] = "_enroll";
 $route['users'] = "_users";
 $route['options'] = "_options";
+$route['plugins'] = "_plugins";
 
 $route['register'] = "_users/register";
 $route['register/complete'] = "_users/registration_complete";
@@ -70,3 +71,11 @@ $route['register/account-activated'] = "_users/account_activated";
 
 $route['verify-account'] = '_users/activate_account';
 $route['display-page'] = '__globalmodule/display_page';
+
+/**
+* Custom Error pages
+*/
+$route['error/400'] = '_error/error_400';
+$route['error/404'] = '_error/error_404';
+$route['error/500'] = '_error/error_500';
+$route['error/restricted'] = '_error/error_restricted';

@@ -19,9 +19,9 @@ $hook['pre_controller'][] = array(
     "filepath" => "hooks"// this is location inside application folder
 );
 
-// $hook['pre_controller'][] = array(
-//     "class"    => "Restrict_user_roles",// any name of class that you want
-//     "function" => "validate",// a method of class
-//     "filename" => "Restrict_user_roles.php",// where the class declared
-//     "filepath" => "hooks"// this is location inside application folder
-// );
+$hook['pre_controller'][] = array(
+    "class"    => "Restrict_user_roles",// any name of class that you want
+    "function" => "check_restriction",// a method of class
+    "filename" => "Restrict_user_roles.php",// where the class declared
+    "filepath" => "hooks"// this is location inside application folder
+);

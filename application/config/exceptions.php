@@ -5,7 +5,8 @@ defined('BASEPATH') OR exit("No direct script access allowed");
 $config['exceptions']['classes'] = array(
     '_login',
     '_default',
-    '_public'
+    '_public',
+    '_error'
 );
 
 $config['exceptions']['methods'] = array(

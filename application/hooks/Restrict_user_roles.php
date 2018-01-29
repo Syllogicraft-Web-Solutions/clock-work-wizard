@@ -14,20 +14,46 @@ class Restrict_user_roles {
         return get_instance()->$property;
     }
 
-    public function is_logged_in() {
-       if ($this->session->has_userdata('user_cookie'))
-            return true;
-        else
-            return false;
-    }
-
-    public function get_capability() { // checks the capability of current user
+    public function check_restriction() {
         $CI =& get_instance();
 
-        $current_user_id = $this->session->userdata('user_cookie')['id'];
+        $this->config->load('exceptions');
+        $execs = $this->config->item('exceptions');
+        $exceptions['class'] = $execs['classes'];
+        $exceptions['method'] = $execs['methods'];
 
-        $res = $CI->functions->get_user_meta('user_role', $current_user_id);
+        foreach ($exceptions['class'] as $key => $value) {
+            if ($this->router->fetch_class() == $value) {
+                // echo $value;
+                return;
+            }
+        }
 
-        return $res;
+        foreach ($exceptions['method'] as $key => $value) {
+            if ($this->router->fetch_method() == $value) {
+                return;
+            }
+        }
+
+        if (! $CI->functions->is_logged_in()) {
+            return;
+        }
+
+        $this->config->load('restrictions');
+        $restrictions = $this->config->item('restrictions');
+
+        $classes = $restrictions['classes'];
+        $methods = $restrictions['methods'];
+
+        $user_id = $CI->session->userdata('user_cookie')['id'];
+        $role = $CI->functions->get_user_role($user_id);
+
+
+        if (in_array($this->router->fetch_class(), $classes[$role]))
+            redirect('/error/restricted');
+
+        if (in_array($this->router->fetch_method(), $methods[$role]))
+            redirect('/error/restricted');
     }
+
 }
