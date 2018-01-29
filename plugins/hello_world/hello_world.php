@@ -12,8 +12,7 @@ require_once(APPPATH . 'libraries/trait.plugins.php');
 class Hello_world extends CI3_plugin_system {
     use plugin_trait;
 
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
 
         add_filter('plugin_test.name', [$this,'alter_name'], 10);
@@ -26,6 +25,10 @@ class Hello_world extends CI3_plugin_system {
         //add_action('hello.person', [$this,'hello_age'], 4);
         //add_action('hello.person', [$this,'hello_name'], 3);
         //add_action('hello.person', [$this,'hello_height'], 3);
+    }
+
+    function activation() {
+        
     }
 
     // Controller for plugin, used to manage the plugin, not required though.
@@ -43,7 +46,7 @@ class Hello_world extends CI3_plugin_system {
 
         ob_clean();
 
-        do_action('nyeam');
+        // do_action('nyeam');
 
         $content .= '<form action="" method="POST">'
             . '<input type="text" name="foo" value="' . @$foo . '"><br>'
@@ -56,6 +59,8 @@ class Hello_world extends CI3_plugin_system {
     }
 
     public function nyeam() {
+        $CI =& get_instance();
+        $CI->functions->add_menu('asd', false, base_url('asda'), 'fa-plug', 'Pluadagins', 'asdas', 6);
         echo "<h1>Nyeam!</h1>";
     }
 

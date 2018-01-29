@@ -62,6 +62,7 @@ $route['enroll'] = "_enroll";
 $route['users'] = "_users";
 $route['options'] = "_options";
 $route['plugins'] = "_plugins";
+$route['plugin/(:any)'] = "_plugins/config/$1";
 
 $route['register'] = "_users/register";
 $route['register/complete'] = "_users/registration_complete";

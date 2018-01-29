@@ -73,7 +73,8 @@ class Functions {
 
 		if (isset($this->sidebar['show'])) {
 			$this->sidebar['with_sidebar'] = true;
-			$this->render_sidebar($CI->globals->get_globals('menu_links'), $this->sidebar['options'], $this->sidebar['current_module_name']);
+			if ($this->is_logged_in())
+				$this->render_sidebar($CI->globals->get_globals('menu_links'), $this->sidebar['options'], $this->sidebar['current_module_name']);
 		}
 
 		$CI->load->view('the-content/start-content', $this->sidebar); // start the content div
@@ -122,16 +123,21 @@ class Functions {
 			$this->sidebar = array('current_module_name' => str_replace('/', '', $current_module_name), 'show' => false, 'options' => $options);
 	}
 
-	function add_menu($name, $show_name, $url, $icon, $text, $module_name = '', $restrict_displaying = true) {
+	function add_menu($name, $show_name, $url, $icon, $text, $module_name = '', $order = '', $restrict_displaying = true) {
 		$CI =& get_instance();
+
+		if ($order == '')
+			return;
 
 		$menu_links = array(
 			'url' => $url,
 			'show_name' => $show_name,
 			'icon' => $icon,
 			'text' => $text,
-			'module_name' => $module_name
+			'module_name' => $module_name,
+			'order' => $order
 		);
+
 
 		if ($restrict_displaying) {
 		   	$CI->config->load('restrictions');
@@ -154,6 +160,16 @@ class Functions {
 
 		$CI->load->library('globals');
 		$CI->globals->set_globals($name, $menu_links, 'menu_links', $module_name = '');
+
+		// Sort and print the menu_links
+		$menu_links = $CI->globals->get_globals('menu_links');
+		uasort($menu_links, function ($a, $b) {
+		    if ($a['order'] == $b['order']) {
+		        return 0;
+		    }
+		    return ($a['order'] < $b['order']) ? -1 : 1;
+		});
+		echo $CI->globals->set_globals('menu_links', $menu_links);
 	}
 
 	function add_header_menu($position = false) {

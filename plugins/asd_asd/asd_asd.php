@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Hello World
+ * Plugin Name: asd asd
  * Plugin URI: https://github.com/jhyland87/CI3_Plugin_System
  * Version: 1.0
  * Description: Apply colors to asset table cells or rows depending on values
@@ -9,7 +9,7 @@
  */
 require_once(APPPATH . 'libraries/abstract.plugins.php');
 require_once(APPPATH . 'libraries/trait.plugins.php');
-class Hello_world extends CI3_plugin_system {
+class Asd_asd extends CI3_plugin_system {
     use plugin_trait;
 
     public function __construct()
@@ -20,9 +20,35 @@ class Hello_world extends CI3_plugin_system {
 
         add_action('plugin_test.log', [$this, 'log_stuff']);
 
+        add_action('asd_asd.add_menu', [$this, 'add_menu']);
+
+        do_action('asd_asd.add_menu');
+
         //add_action('hello.person', [$this,'hello_age'], 4);
         //add_action('hello.person', [$this,'hello_name'], 3);
         //add_action('hello.person', [$this,'hello_height'], 3);
+    }
+
+    public function add_menu() {
+        $CI =& get_instance();
+        $uri = "plugin/" . strtolower(get_class($this));
+        $CI->functions->add_menu('asd', false, base_url($uri), 'fa-clock', 'Clocker', '', 6);
+    }
+
+    static function install($data = NULL) {
+
+    }
+
+    function activate($data = NULL) {
+
+    }
+
+    function activation() {
+
+    }
+
+    function deactivation() {
+
     }
 
     // Controller for plugin, used to manage the plugin, not required though.

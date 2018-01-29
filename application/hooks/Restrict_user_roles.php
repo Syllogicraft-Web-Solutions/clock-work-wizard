@@ -24,7 +24,6 @@ class Restrict_user_roles {
 
         foreach ($exceptions['class'] as $key => $value) {
             if ($this->router->fetch_class() == $value) {
-                // echo $value;
                 return;
             }
         }

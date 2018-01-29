@@ -71,6 +71,12 @@ form.enroll-form input, form.login-form input, form.enroll-form select {
 	border-width: 2px; 
 }
 
+.select-style {
+	background: transparent !important;
+	padding: 5px !important;
+	border-width: 2px !important; 
+}
+
 .fields {
 	margin-bottom: 10px;
 	margin-top: 10px;

@@ -22,14 +22,12 @@ class Check_session {
 
         foreach ($exceptions['class'] as $key => $value) {
             if ($this->router->fetch_class() == $value) {
-                // echo $value;
                 return;
             }
         }
 
         foreach ($exceptions['method'] as $key => $value) {
             if ($this->router->fetch_method() == $value) {
-                // echo $value;
                 return;
             }
         }

@@ -166,4 +166,9 @@ class Plugins_model extends CI_Model
 
         return ( ! @empty($result[0]) ? $result[0] : FALSE);
     }
+
+
+    public function install_plugin_data($plugin, array $settings) {
+        return static::$db->insert('plugins', $settings);
+    }
 }

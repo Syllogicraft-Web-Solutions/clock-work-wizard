@@ -339,6 +339,7 @@ class Plugins_lib {
      */
     public function install_plugin($plugin, $data = NULL)
     {
+        var_dump($plugin);
         // System name for folder and file
         $system_name = strtolower($plugin);
 
@@ -357,15 +358,60 @@ class Plugins_lib {
                 if( ! include_once $plugin_path)
                 {
                     $this->_error("Failed to install {$plugin}, there was an error loading the plugin file {$plugin_path}, is it readable?");
+                    // echo "Failed to install {$plugin}, there was an error loading the plugin file {$plugin_path}, is it readable?";
                 }
-                else
-                {
+                else {
+
+
+                    $arr = array();
+
+                    $plugin_data = file_get_contents(static::$plugin_path.$plugin."/".$plugin.".php"); // Load the plugin we want
+
+                    preg_match ('|Plugin Name:(.*)$|mi', $plugin_data, $name);
+                    preg_match ('|Plugin URI:(.*)$|mi', $plugin_data, $uri);
+                    preg_match ('|Version:(.*)|i', $plugin_data, $version);
+                    preg_match ('|Description:(.*)$|mi', $plugin_data, $description);
+                    preg_match ('|Author:(.*)$|mi', $plugin_data, $author_name);
+                    preg_match ('|Author URI:(.*)$|mi', $plugin_data, $author_uri);
+
+                    $arr['system_name'] = $system_name;
+
+                    if (isset($name[1]))
+                        $arr['name'] = trim($name[1]);
+
+                    $arr['status'] = 0;
+
+                    if (isset($uri[1]))
+                        $arr['uri'] = trim($uri[1]);
+
+                    if (isset($version[1]))
+                        $arr['version'] = trim($version[1]);
+
+                    if (isset($description[1]))
+                        $arr['description'] = trim($description[1]);
+
+                    if (isset($author_name[1]))
+                        $arr['author'] = trim($author_name[1]);
+
+                    if (isset($author_uri[1]))
+                        $arr['author_uri'] = trim($author_uri[1]);
+
+                    if(empty($arr))
+                        $this->_warn("Skipping header update for {$plugin}, no headers matched");
+                    elseif(self::$PM->install_plugin_data($plugin, $arr)) {
+                        $this->_debug("Updated plugin headers for {$plugin}: " . serialize($arr));
+                        echo "Updated plugin headers for {$plugin}: " . serialize($arr);
+                    } else
+                        $this->_error("Failed to update plugin headers for {$plugin}: " . serialize($arr));
+
                     $this->_debug("Successfully loaded the plugin file {$plugin_path}");
+                    // echo "Successfully loaded the plugin file {$plugin_path}";
                 }
             }
             else
             {
                 $this->_error("Failed to install {$plugin}, unable to find the file {$plugin_path}");
+                // echo "Failed to install {$plugin}, unable to find the file {$plugin_path}";
             }
         }
 
@@ -502,7 +548,9 @@ class Plugins_lib {
         {
             foreach( static::$enabled_plugins as $name => $p )
             {
-                new $name;
+                if ($name != '') {
+                    new $name;
+                }
             }
         }
     }
