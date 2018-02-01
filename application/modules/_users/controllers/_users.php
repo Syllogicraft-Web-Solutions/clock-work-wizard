@@ -31,8 +31,6 @@ class _users extends MX_Controller {
 		$view = $this->page['module_name'] . 'index';
 		$this->page['assets_url'] = $this->assets;
 
-		
-
 		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
@@ -103,7 +101,7 @@ class _users extends MX_Controller {
 
 		$data['activation_key'] = $user_activation_key;
 		$data['nickname'] = $nickname;
-		$data['link'] = base_url('verify-account?activation_key=' . $user_activation_key);
+		$data['link'] = base_url('verify-account?activation_key=' . urlencode($user_activation_key));
 		$message = $this->__globalmodule->read_email_template('activation-link', 'read', $data);
 
 		// Configure email library

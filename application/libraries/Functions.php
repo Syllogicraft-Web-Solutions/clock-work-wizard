@@ -146,7 +146,11 @@ class Functions {
 	        $user_id = $CI->session->userdata('user_cookie')['id'];
 	        if ($user_id == '')
 	        	return;
-	        $role = $this->get_user_role($user_id);
+	       
+	       	$role = $this->get_user_role($user_id);
+
+	       	if (! $role)
+	       		return;
 
 	        $classes = $restrictions['classes'][$role];
 	        $methods = $restrictions['methods'][$role];
@@ -169,7 +173,9 @@ class Functions {
 		    }
 		    return ($a['order'] < $b['order']) ? -1 : 1;
 		});
-		echo $CI->globals->set_globals('menu_links', $menu_links);
+		$CI->globals->set_globals('menu_links', $menu_links);
+		// echo "<pre>";
+		// var_dump($CI->globals->get_globals('menu_links'));
 	}
 
 	function add_header_menu($position = false) {
@@ -367,6 +373,21 @@ class Functions {
 
 	}
 
+	function check_user_metas($user_id) {
+        if ($res != '') {
+            $query = "SELECT * FROM users INNER JOIN user_meta ON users.id = user_meta.user_id WHERE users.id = $user_id";
+
+			$role = $CI->__globalmodule->_custom_query($query)->result();
+			if (sizeof($role) > 0) {
+				foreach ($role as $key => $value) {
+					$res = $value->meta_value;
+				}
+			} else {
+				return false;
+			}
+        }
+	}
+
 	function get_user_meta($meta_key, $user_id) {
 		$CI =& get_instance();
 
@@ -381,7 +402,7 @@ class Functions {
 		$query .= " LIMIT 1 ";
 		// exit($query);
 		$data = $CI->__globalmodule->_custom_query($query)->result();
-// var_dump($data);
+		// var_dump($data);
 		if (sizeof($data) < 1)
 			return "";
 
@@ -406,11 +427,11 @@ class Functions {
 				foreach ($role as $key => $value) {
 					$res = $value->meta_value;
 				}
-			}
+			} else 
+				$res = false;
         }
 
-        return json_decode($res);
+        return $res ? json_decode($res) : $res;
     }
-
 
 }

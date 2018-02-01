@@ -46,7 +46,8 @@ class Restrict_user_roles {
 
         $user_id = $CI->session->userdata('user_cookie')['id'];
         $role = $CI->functions->get_user_role($user_id);
-
+        // if (! $role)
+        //     redirect('/error/restricted');
 
         if (in_array($this->router->fetch_class(), $classes[$role]))
             redirect('/error/restricted');

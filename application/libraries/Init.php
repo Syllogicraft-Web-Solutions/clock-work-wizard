@@ -16,10 +16,10 @@ class Init extends Functions {
 
 	function display_menu_links() {		
 		// add more links here
-		$this->add_menu('dashboard', false, base_url() . 'dashboard', 'fa-home', 'Dashboard', 'dashboard', 1);
-		$this->add_menu('users', false, base_url() . 'users', 'fa-user', 'Users', 'users', 2);
-		$this->add_menu('options', false, base_url('options'), 'fa-cogs', 'Options', 'options', 3);
-		$this->add_menu('plugins', false, base_url('plugins'), 'fa-plug', 'Plugins', 'plugins', 4);
+		$this->add_menu('dashboard', false, base_url() . 'dashboard', 'fa-home', 'Dashboard', '_dashboard', 1);
+		$this->add_menu('users', false, base_url() . 'users', 'fa-user', 'Users', '_users', 2);
+		$this->add_menu('options', false, base_url('options'), 'fa-cogs', 'Options', '_options', 3);
+		$this->add_menu('plugins', false, base_url('plugins'), 'fa-plug', 'Plugins', '_plugins', 4);
 		$this->add_menu('logout', false, base_url() . '_login/do_logout', 'fa-power-off', 'Logout', '_login', 99);
 	}
 
