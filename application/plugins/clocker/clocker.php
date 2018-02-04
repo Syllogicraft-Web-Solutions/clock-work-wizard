@@ -1,25 +1,27 @@
 <?php
 /**
- * Plugin Name: Hello Worldasdasd
+ * Plugin Name: Clocker
  * Plugin URI: https://github.com/jhyland87/CI3_Plugin_System
  * Version: 1.0
- * Description: Apply colors to asset table cells or rows depending on values
+ * Description: Display current time, record time-in time-out of the user
  * Author: Justin Hyland
  * Author URI: http://justinhyland.com
  */
-class Hello_world extends CI3_plugin_system {
+class Clocker extends CI3_plugin_system {
     use plugin_trait;
+
+    var $mdl_name;
 
     public function __construct() {
         parent::__construct();
+
+        $this->mdl_name = get_class();
 
         add_filter('plugin_test.name', [$this,'alter_name'], 10);
 
         add_action('plugin_test.log', [$this, 'log_stuff']);
 
-
-        add_filter('nyeam', [$this,'nyeam'], 10);
-
+        $this->add_menu();
         //add_action('hello.person', [$this,'hello_age'], 4);
         //add_action('hello.person', [$this,'hello_name'], 3);
         //add_action('hello.person', [$this,'hello_height'], 3);
@@ -28,8 +30,8 @@ class Hello_world extends CI3_plugin_system {
   
     public function add_menu() {
         $CI =& get_instance();
-        $uri = "plugin/" . strtolower(get_class($this));
-        $CI->functions->add_menu('asd', false, base_url($uri), 'fa-clock', 'Clocker', '', 6);
+        $uri = "mdl/" . strtolower(get_class());
+        $CI->functions->add_menu('clocker', false, base_url($uri), 'fa-clock', 'Clocker', '_clocker', 6);
     }
 
     static function install($data = NULL) {
@@ -40,9 +42,9 @@ class Hello_world extends CI3_plugin_system {
 
     }
 
-    function deactivate() {
+    /* function deactivate() {
 
-    }
+	} */
 
     // Controller for plugin, used to manage the plugin, not required though.
     public function controller($data = NULL) {
@@ -73,6 +75,7 @@ class Hello_world extends CI3_plugin_system {
 
     public function nyeam() {
         $CI =& get_instance();
+        return get_class();
         $CI->functions->add_menu('asd', false, base_url('asda'), 'fa-plug', 'Pluadagins', 'asdas', 6);
         echo "<h1>Nyeam!</h1>";
     }

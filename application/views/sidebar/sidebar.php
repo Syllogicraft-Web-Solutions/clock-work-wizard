@@ -12,7 +12,7 @@
 				$text = $value['text'] != '' ? $value['text'] : '';
 				$module_name = $value['module_name'] != '' ? $value['module_name'] : '';
 				if ($module_name != '')
-					$curr_mod = strpos($current_module_name, $module_name);
+					$curr_mod = ($current_module_name == $module_name);
 				else
 					$curr_mod = false;
 			?>

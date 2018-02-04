@@ -128,13 +128,11 @@ class _plugins extends MX_Controller {
         return $res;
     }
 
-    public function config($plugin) {
+    public function config($plugin = "") {
         $data = array();
 
-
-        var_dump($plugin);
         if( ! $plugin ) {
-
+            $plugin = $_GET['plugin'];
             // redirect('/plugins');
         }
         elseif( ! isset($this->_plugins[$plugin]))
@@ -172,5 +170,15 @@ class _plugins extends MX_Controller {
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
     }
 
+    public function view_plugin_as_mdl($plugin = false, $display = 'index') {
+        if (! $plugin)
+            redirect(base_url('dashboard'));
+            
+        $mdl = "_{$plugin}";
+        $this->load->module("{$plugin}/" . $mdl);
+        $m_e = method_exists($this->$mdl, $display);
+        if ($m_e) 
+            $this->$mdl->$display();
+    }
 
 }

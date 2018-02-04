@@ -138,7 +138,6 @@ class Functions {
 			'order' => $order
 		);
 
-
 		if ($restrict_displaying) {
 		   	$CI->config->load('restrictions');
 	        $restrictions = $CI->config->item('restrictions');
@@ -174,8 +173,6 @@ class Functions {
 		    return ($a['order'] < $b['order']) ? -1 : 1;
 		});
 		$CI->globals->set_globals('menu_links', $menu_links);
-		// echo "<pre>";
-		// var_dump($CI->globals->get_globals('menu_links'));
 	}
 
 	function add_header_menu($position = false) {

@@ -62,7 +62,10 @@ $route['enroll'] = "_enroll";
 $route['users'] = "_users";
 $route['options'] = "_options";
 $route['plugins'] = "_plugins";
-$route['plugin/(:any)'] = "_plugins/config/$1";
+$route['plugin-settings/(:any)'] = "_plugins/config/$1";
+
+$route['mdl/(:any)'] = "_plugins/view_plugin_as_mdl/$1";
+$route['mdl/(:any)/(:any)'] = "_plugins/view_plugin_as_mdl/$1/$2";
 
 $route['register'] = "_users/register";
 $route['register/complete'] = "_users/registration_complete";

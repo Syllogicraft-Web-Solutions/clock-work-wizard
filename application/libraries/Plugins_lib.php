@@ -169,6 +169,7 @@ class Plugins_lib {
      */
     private function set_plugin_dir()
     {
+        static::$CI->config->load('plugins');
         if($path = static::$CI->config->item('plugin_path'))
         {
             $this->_debug("Plugin path set to {$path} via config setting");

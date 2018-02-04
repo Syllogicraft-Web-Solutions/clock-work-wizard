@@ -7,8 +7,6 @@
  * Author: Justin Hyland
  * Author URI: http://justinhyland.com
  */
-require_once(APPPATH . 'libraries/abstract.plugins.php');
-require_once(APPPATH . 'libraries/trait.plugins.php');
 class Asd_asd extends CI3_plugin_system {
     use plugin_trait;
 
@@ -31,20 +29,25 @@ class Asd_asd extends CI3_plugin_system {
 
     public function add_menu() {
         $CI =& get_instance();
-        $uri = "plugin/" . strtolower(get_class($this));
+        $uri = "mdl/" . strtolower(get_class($this));
         $CI->functions->add_menu('asd', false, base_url($uri), 'fa-clock', 'Clocker', '', 6);
     }
+    
 
     static function install($data = NULL) {
 
     }
 
     function activate($data = NULL) {
-
     }
 
     function activation() {
 
+        $CI =& get_instance();
+
+        $CI->load->library('pigeon');
+        $CI->pigeon->draw();
+        $CI->pigeon->route('posts', '_plugins');
     }
 
     function deactivation() {

@@ -38,9 +38,9 @@
                 ?>
                 <tr>
                     <?php if ($p->status) { ?>
-                            <td><a href="<?= base_url('_plugins/config/?plugin=' . $p->system_name) ?>"><strong><?= $p->name ?></strong></a></td>
+                            <td><a href="<?= base_url('plugin-settings/' . $p->system_name . '?plugin=' . $p->system_name) ?>"><strong><?= $p->name ?></strong></a></td>
                     <?php } else { ?>
-                            <td><a href="<?= base_url('_plugins/config/?plugin=' . $p->system_name) ?>"><?= $p->name ?></a></td>
+                            <td><?= $p->name ?></td>
                     <?php } ?>
                     <td><?php echo $status; ?></td>
                     <td><?php echo '<a href=' . $p->uri . '" target="_blank">' . $p->uri . '</a>'; ?></td>
