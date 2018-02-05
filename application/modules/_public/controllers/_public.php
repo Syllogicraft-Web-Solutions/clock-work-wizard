@@ -8,5 +8,8 @@ class _public extends MX_Controller{
 		parent::__construct();
 	}
 
+	public function get_time($format = 'json') {
+		echo date("m/d/y : H:i:s", time());
+	}
 
 }

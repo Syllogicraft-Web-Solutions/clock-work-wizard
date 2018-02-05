@@ -314,22 +314,18 @@ class Functions {
 
 	}
 
-	function get_option($option_name, $user_id = '') {
-
-		if ( $user_id != '' ) {
-			$current_user_id = $this->user_id;
-		}
-
-		$this->__globalmodule->set_tablename('options');
-		$table = $this->__globalmodule->get_tablename();
+	function get_option($option_name, $user_id) {
+		$CI =& get_instance();
+		$CI->__globalmodule->set_tablename('options');
+		$table = $CI->__globalmodule->get_tablename();
 
 		$query = "SELECT option_value FROM $table WHERE option_name = '$option_name'";
 
-		$query .= $user_id ? " AND owner_id = " . $current_user_id : "";
+		$query .= " AND owner_id = " . $user_id;
 
 		$query .= " LIMIT 1 ";
 
-		$data = $this->__globalmodule->_custom_query($query)->result();
+		$data = $CI->__globalmodule->_custom_query($query)->result();
 
 		if (sizeof($data) < 1)
 			return "";
@@ -344,25 +340,32 @@ class Functions {
 
 	// For Users module
 	function add_user_meta($meta_key, $meta_value, $user_id) {
-
+		$CI =& get_instance();
 		$value = json_encode($meta_value);
 
 		// $data['owner_id']
-		$data['owner_id'] = $user_id;
+		$data['user_id'] = $user_id;
 		$data['meta_key'] = $meta_key;
 		$data['meta_value'] = $value;
 
 		if (! $this->option_exists($meta_key, $user_id)) {
-			$this->__globalmodule->set_tablename('options');
-			return $this->__globalmodule->_insert($data);
+			$CI->__globalmodule->set_tablename('user_meta');
+			return $CI->__globalmodule->_insert($data);
 		} else {
 			return;
 		}
 	}
 
+	function get_current_user_id() {
+		$CI =& get_instance();
+		if ($CI->session->has_userdata('user_cookie'))
+			return $CI->session->userdata('user_cookie')['id'];
+		return false;
+	}
+
 	function user_meta_exists($meta_key, $user_id) {
 
-		if ($this->get_option($meta_key, $user_id) != '') {
+		if ($this->get_user_meta($meta_key, $user_id) != '') {
 			return true;
 		} else {
 			return false;
