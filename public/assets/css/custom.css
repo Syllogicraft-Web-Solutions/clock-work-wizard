@@ -1,3 +1,5 @@
+@import url("jimbo.css");
+
 a[title="Hosted on free web hosting 000webhost.com. Host your own website for FREE."] {
     display: none !important;
 }
@@ -69,6 +71,12 @@ form.enroll-form input, form.login-form input, form.enroll-form select {
 	background: transparent;
 	padding: 5px;
 	border-width: 2px; 
+}
+
+select {
+	background: transparent;
+	padding: 5px;
+	border-width: 0 0 2px 0;
 }
 
 .select-style {

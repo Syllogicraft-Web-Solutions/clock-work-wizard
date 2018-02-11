@@ -58,13 +58,13 @@ class __globalmodel extends CI_Model {
 	function _update($id, $data) {
 		$table = $this->get_table();
 		$this->db->where('id', $id);
-		$this->db->update($table, $data);
+		return $this->db->update($table, $data);
 	}
 
 	function _delete($id) {
 		$table = $this->get_table();
 		$this->db->where('id', $id);
-		$this->db->delete($table);
+		return $this->db->delete($table);
 	}
 
 	function count_where($column, $value) {
@@ -100,5 +100,11 @@ class __globalmodel extends CI_Model {
 	function _insert_batch($data) {
 		$table = $this->get_table();
 		return $this->db->insert_batch($table, $data);
+	}
+
+	function _update_where($column, $id, $data) {
+		$table = $this->get_table();
+		$this->db->where($column, $id);
+		return $this->db->update($table, $data);
 	}
 }

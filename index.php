@@ -5,7 +5,7 @@
 	* Change the filename from local to live
 	*
 	*/
-	require_once('application/connection-config/connection-config-local.php');
+	require_once('application/connection-config/connection-config-syllogicraft.php');
 
 /**
  * CodeIgniter

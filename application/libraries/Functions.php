@@ -288,7 +288,7 @@ class Functions {
 
 	// For Options module
 	function add_option($option_name, $option_value, $user_id) {
-
+		$CI =& get_instance();
 		$value = json_encode($option_value);
 
 		// $data['owner_id']
@@ -297,16 +297,36 @@ class Functions {
 		$data['option_value'] = $value;
 
 		if (! $this->option_exists($option_name, $user_id)) {
-			$this->__globalmodule->set_tablename('options');
-			return $this->__globalmodule->_insert($data);
+			$CI->__globalmodule->set_tablename('options');
+			return $CI->__globalmodule->_insert($data);
 		} else {
 			return;
 		}
 	}
 
-	function option_exists($option_name, $user_id) {
+	function update_option($option_name, $option_value, $user_id) {
+		$CI =& get_instance();
+		$value = json_encode($option_value);
 
-		if ($this->get_option($option_name, $user_id) != '') {
+		$data['owner_id'] = $user_id;
+		$data['option_name'] = $option_name;
+		$data['option_value'] = json_encode($option_value);
+
+		if (! $this->option_exists($option_name, $user_id)) {
+			$CI->__globalmodule->set_tablename('options');
+			return $CI->__globalmodule->_insert($data);
+		} else {
+			$CI->__globalmodule->set_tablename('options');
+			$table = $CI->__globalmodule->get_tablename();
+			$id_to_update = $CI->__globalmodule->_custom_query("SELECT option_id FROM $table WHERE option_name = '$option_name' AND owner_id = $user_id")->result()[0]->option_id;
+			unset($data['owner_id']);
+			unset($data['option_name']);
+			return $CI->__globalmodule->_update_where('option_id', (int) $id_to_update, $data);
+		}
+	}	
+
+	function option_exists($option_name, $user_id) {
+		if (strlen($this->get_option($option_name, $user_id)) > 0) {
 			return true;
 		} else {
 			return false;
@@ -356,6 +376,27 @@ class Functions {
 		}
 	}
 
+	function update_meta_user($meta_key, $meta_value, $user_id) {
+		$CI =& get_instance();
+		$value = json_encode($meta_value);
+
+		$data['user_id'] = $user_id;
+		$data['meta_key'] = $meta_key;
+		$data['meta_value'] = $value;
+
+		if (! $this->user_meta_exists($meta_key, $user_id)) {
+			$CI->__globalmodule->set_tablename('user_meta');
+			return $CI->__globalmodule->_insert($data);
+		} else {
+			$CI->__globalmodule->set_tablename('user_meta');
+			$table = $CI->__globalmodule->get_tablename();
+			$id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE meta_key = '$meta_key' AND user_id = $user_id")->result()[0]->id;
+			unset($data['user_id']);
+			unset($data['meta_key']);
+			return $CI->__globalmodule->_update_where('id', (int) $id_to_update, $data);
+		}
+	}
+
 	function get_current_user_id() {
 		$CI =& get_instance();
 		if ($CI->session->has_userdata('user_cookie'))
@@ -364,8 +405,7 @@ class Functions {
 	}
 
 	function user_meta_exists($meta_key, $user_id) {
-
-		if ($this->get_user_meta($meta_key, $user_id) != '') {
+		if (strlen($this->get_user_meta($meta_key, $user_id)) > 0) {
 			return true;
 		} else {
 			return false;
@@ -401,15 +441,14 @@ class Functions {
 
 		$query .= " LIMIT 1 ";
 		// exit($query);
-		$data = $CI->__globalmodule->_custom_query($query)->result();
+		$data = $CI->__globalmodule->_custom_query($query)->result()[0]->meta_value;
 		// var_dump($data);
-		if (sizeof($data) < 1)
+		if ($data == NULL)
 			return "";
 
-		foreach ($data as $key => $value) {
-			$data = $value->meta_value;
-		}
-
+		// foreach ($data as $key => $value) {
+		// 	$data = $value->meta_value;
+		// }
 		return json_decode($data);
 	}
 

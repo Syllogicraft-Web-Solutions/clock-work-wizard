@@ -286,10 +286,6 @@ class _users extends MX_Controller {
 			$user_meta_keys = array(
 				array(
 					'user_id' => $id,
-					'meta_key' => 'clock_status',
-					'meta_value' => json_encode('0')
-				), array(
-					'user_id' => $id,
 					'meta_key' => 'manager',
 					'meta_value' => json_encode($manager)
 				), array(
@@ -302,10 +298,6 @@ class _users extends MX_Controller {
 		} else {
 			$user_meta_keys = array(
 				array(
-					'user_id' => $id,
-					'meta_key' => 'clock_status',
-					'meta_value' => json_encode('0')
-				), array(
 					'user_id' => $id,
 					'meta_key' => 'user_role',
 					'meta_value' => json_encode('manager')

@@ -16,7 +16,7 @@
 				else
 					$curr_mod = false;
 			?>
-				<a href="<?= $url ?>" title="<?= $text ?>" class="w3-hover-theme <?= $curr_mod ? 'w3-theme-light' : '' ?> w3-bar-item w3-button"><i class="fa <?= $icon ?> "></i><?= $show ? '&nbsp;' . $text : '' ?></a>
+				<a href="<?= $url ?>" title="<?= $text ?>" class="w3-hover-theme <?= $curr_mod ? 'w3-theme-active' : '' ?> w3-bar-item w3-button"><i class="fa <?= $icon ?> "></i><?= $show ? '&nbsp;' . $text : '' ?></a>
 			<?php
 			}
 		} else {
