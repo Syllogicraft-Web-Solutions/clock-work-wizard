@@ -18,34 +18,13 @@ class Clocker extends CI3_plugin_system {
         $this->mdl_name = get_class();
         $CI =& get_instance();
         $CI->functions->get_current_user_id();
-        
-        add_filter('plugin_test.name', [$this,'alter_name'], 10);
-
-        add_action('plugin_test.log', [$this, 'log_stuff']);
-        add_action('clocker.clocker_menu_button', [$this, 'add_menu']);
-        add_action('clocker.clock', [$this, 'display_realtime_clock']);
-        add_action('clocker.display_buttons', [$this, 'display_clocker_buttons']);
-        add_action('clocker.check_clocker_status', [$this, 'check_clocker_status']);
-
-        add_action('clocker.punch-in-btn', [$this, 'display_punch_in_btn']);
-        add_action('clocker.punch-out-btn', [$this, 'display_punch_out_btn']);
-        add_action('clocker.break-in-btn', [$this, 'display_break_in_btn']);
-        add_action('clocker.break-out-btn', [$this, 'display_break_out_btn']);
-
-        add_action('clocker.sample', [$this, 'do_punch_in']);
-
-        add_action('clocker.punch-in', [$this, 'do_punch_in']);
-        add_action('clocker.punch-out', [$this, 'do_punch_out']);
-        add_action('clocker.break-in', [$this, 'do_break_in']);
-        add_action('clocker.break-out', [$this, 'do_break_out']);
-
-        add_action('clocker.default_timezone', [$this, 'set_default_timezone']);
-        //add_action('hello.person', [$this,'hello_age'], 4);
-        //add_action('hello.person', [$this,'hello_name'], 3);
-        //add_action('hello.person', [$this,'hello_height'], 3);
-        // do_action('clocker.check_clocker_status');
-        do_action('clocker.clocker_menu_button');
-        do_action('clocker.default_timezone', ['Asia/Manila']);
+        require_once(__DIR__ . '/hooks.php');
+    }
+  
+    public function add_menu() {
+        $CI =& get_instance();
+        $uri = "mdl/" . strtolower(get_class());
+        $CI->functions->add_menu('clocker', false, base_url($uri), 'fa-clock', 'Clocker', '_clocker', 6);
     }
 
     function set_default_timezone($timezone_id = '') {
@@ -62,17 +41,11 @@ class Clocker extends CI3_plugin_system {
         // }
         date_default_timezone_set($timezone_id);
     }
-
+    
     function display_realtime_clock() {
         require_once(__DIR__ . '/views/clock.php');
     }
-  
-    public function add_menu() {
-        $CI =& get_instance();
-        $uri = "mdl/" . strtolower(get_class());
-        $CI->functions->add_menu('clocker', false, base_url($uri), 'fa-clock', 'Clocker', '_clocker', 6);
-    }
-
+    
     public function display_clocker_buttons() {
         $punched_out = 0;
         $punched_in = 1;
@@ -231,9 +204,9 @@ class Clocker extends CI3_plugin_system {
 
     }
 
-    /* function deactivate() {
+    function deactivate($data = NULL) {
 
-	} */
+	}
 
     // Controller for plugin, used to manage the plugin, not required though.
     public function controller($data = NULL) {

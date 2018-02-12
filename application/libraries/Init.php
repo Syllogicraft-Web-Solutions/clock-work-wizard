@@ -50,6 +50,11 @@ class Init extends Functions {
 				'src' => $this->assets . 'jquery-ui-custom/jquery-ui.min.js',
 				'type' => '',
 				'attrs' => array()
+			), array(
+				'script_name' => 'Custom JS',
+				'src' => $this->assets . 'js/custom.js',
+				'type' => '',
+				'attrs' => array()
 			)
 		);
 		$link_tags = array(
@@ -79,6 +84,11 @@ class Init extends Functions {
 				'rel' => '',
 				'type' => '',
 				'href' => $this->assets . 'fontawesome/web/css/fontawesome-all.min.css'
+			), array(
+				'link_name' => 'FontAwesome 5',
+				'rel' => 'icon',
+				'type' => 'image/png',
+				'href' => $this->assets . 'img/logo.png'
 			)
 		);
 		$meta_tags = array(

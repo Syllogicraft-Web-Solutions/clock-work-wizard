@@ -16,7 +16,7 @@ class _public extends MX_Controller {
 		// $daylight_saving = TRUE;
 		// $t = gmt_to_local($timestamp, $timezone, $daylight_saving);
 		
-		date_default_timezone_set('Asia/Manila');
+		// date_default_timezone_set('Asia/Manila');
 		echo date('h:i:s A', time());
 		// $datestring = '%L';
 		// $time = time();

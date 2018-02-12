@@ -42,7 +42,7 @@ class Functions {
 	}
 
 	// Please use $page variable inside the page you are going to render, if you have a data to pass in it
-	function render_page($display_header = false, $page_title = "", $js = array(), $link = array(), $meta = array(), $view_file = "", $data = []) {
+	function render_page($display_header = false, $page_title = "", $js = array(), $link = array(), $meta = array(), $view_file = "", $data = [], $preloader = '94') {
 		$CI =& get_instance();
 		$page['page_title'] = $page_title;
 		$page['page'] = $data;
@@ -64,6 +64,14 @@ class Functions {
 			foreach ($meta as $key => $val) {
 				$this->add_meta($val['meta_name'], $val['name'], $val['content']);
 			}
+		}
+
+		if ($preloader) {
+			$view = "components/pre-loader-";
+			if ($this->view_exists($view . $preloader))
+				$CI->load->view($view . $preloader);
+			else
+				$CI->load->view($view . '94');
 		}
 
 		$CI->load->view('head/html-end-head.php'); //end head tag
