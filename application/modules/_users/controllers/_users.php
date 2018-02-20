@@ -228,9 +228,14 @@ class _users extends MX_Controller {
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}*/
 
-	function add_employee() {
-		$view = $this->page['module_name'] . 'add-employee';
+	function add_user() {
+		$view = $this->page['module_name'] . 'add-user';
 		$this->page['assets_url'] = $this->assets;
+
+		if(isset($_POST['add-user'])) {
+			unset($_POST['add-user']);
+			
+		}
 
 		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
 		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);

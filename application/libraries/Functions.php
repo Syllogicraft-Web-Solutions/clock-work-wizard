@@ -288,10 +288,10 @@ class Functions {
     public function is_logged_in() {
     	$CI =& get_instance();
 
-       	if ($CI->session->has_userdata('user_cookie'))
-            return true;
-        else
-            return false;
+       	if ($CI->session->has_userdata('user_cookie') && $this->is_user_exists($CI->session->userdata('user_cookie')['id']))
+          	return true;
+		else
+          	return false;
     }
 
 	// For Options module
@@ -367,6 +367,18 @@ class Functions {
 
 
 	// For Users module
+	function is_user_exists($user_id) {
+		$CI =& get_instance();
+		$CI->load->module('__globalmodule');
+		$CI->__globalmodule->set_tablename('users');
+		$table = $CI->__globalmodule->get_tablename();
+
+		$query = "SELECT id FROM $table WHERE id = '$user_id'";
+		$data = $CI->__globalmodule->_custom_query($query)->result();
+
+		return $data ? true : false;
+	}
+
 	function add_user_meta($meta_key, $meta_value, $user_id) {
 		$CI =& get_instance();
 		$value = json_encode($meta_value);
@@ -449,11 +461,12 @@ class Functions {
 
 		$query .= " LIMIT 1 ";
 		// exit($query);
-		$data = $CI->__globalmodule->_custom_query($query)->result()[0]->meta_value;
+		$data = $CI->__globalmodule->_custom_query($query)->result();
 		// var_dump($data);
 		if ($data == NULL)
 			return "";
 
+		$data = $data[0]->meta_value;
 		// foreach ($data as $key => $value) {
 		// 	$data = $value->meta_value;
 		// }

@@ -13,7 +13,7 @@ class Globalmodel extends CI_Model {
 			echo "Table name is empty.";
 			return;
 		}
-		$this->tablename = $table
+		$this->tablename = $table;
 	}
 
 	function get_table() {

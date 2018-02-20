@@ -32,9 +32,14 @@ class Check_session {
             }
         }
 
-        if ($this->session->userdata('user_cookie')['id'] != NULL) {
-            return;
-        }
+       
+        // if ($this->session->userdata('user_cookie')['id'] != NULL) {
+        //     if (! $this->functions->is_user_exists($this->session->userdata('user_cookie')['id'])) {
+        //         // header('Location: ' . base_url('login') . '?ref=' . $this->session->userdata('redirect_here')) ;
+        //         $this->session->unset_userdata('user_cookie');
+        //         redirect('/error/restricted');
+        //     }
+        // }
 
         if (! $this->session->userdata('user_cookie')) {
             header('Location: ' . base_url('login') . '?ref=' . $this->session->userdata('redirect_here')) ;

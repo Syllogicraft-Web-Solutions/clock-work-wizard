@@ -79,7 +79,7 @@ class Clocker extends CI3_plugin_system {
             jQuery('#punch-in-btn').click(function() {
                 jQuery.post('<?= base_url('clocker/_clocker/do_clockers/punch-in/' . $this->current_user_id) ?>', function(data) {
                     console.log(data);
-                    if (data == 1)
+                    if (data)
                         window.location = window.location;
                     else
                         alert("Unable to do action, please try refreshing the page.");
@@ -96,7 +96,7 @@ class Clocker extends CI3_plugin_system {
             jQuery('#punch-out-btn').click(function() {
                 jQuery.post('<?= base_url('clocker/_clocker/do_clockers/punch-out/' . $this->current_user_id) ?>', function(data) {
                     console.log(data);
-                    if (data == 1)
+                    if (data)
                         window.location = window.location;
                     else
                         alert("Unable to do action, please try refreshing the page.");
@@ -113,7 +113,7 @@ class Clocker extends CI3_plugin_system {
             jQuery('#break-in-btn').click(function() {
                 jQuery.post('<?= base_url('clocker/_clocker/do_clockers/break-in/' . $this->current_user_id) ?>', function(data) {
                     console.log(data);
-                    if (data == 1)
+                    if (data)
                         window.location = window.location;
                     else
                         alert("Unable to do action, please try refreshing the page.");
@@ -130,7 +130,7 @@ class Clocker extends CI3_plugin_system {
             jQuery('#break-out-btn').click(function() {
                 jQuery.post('<?= base_url('clocker/_clocker/do_clockers/break-out/' . $this->current_user_id) ?>', function(data) {
                     console.log(data);
-                    if (data == 1)
+                    if (data)
                         window.location = window.location;
                     else
                         alert("Unable to do action, please try refreshing the page.");

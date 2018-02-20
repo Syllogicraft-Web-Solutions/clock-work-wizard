@@ -30,6 +30,17 @@ class _public extends MX_Controller {
 		// echo timezone_menu('UP8');
 	}
 
+	public function nyeam() {
+		$this->load->config('admin_configs');
+
+		echo $this->config->item('admin_configs')['nyeam'];
+		$this->config->set_item('admin_configs', 'item_value');
+
+		// echo $this->config->item('admin_configs')['nyeam'];
+
+		$this->config->set_item('admin_configs', 'item_value');
+	}
+
 	public function get_day() {
 		
 		echo date('l', time());
