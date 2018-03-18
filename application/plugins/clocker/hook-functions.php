@@ -3,15 +3,15 @@
 
 function set_default_timezone($timezone_id = '') {
      // $CI =& get_instance();
-     // $this->current_user_id = $CI->functions->get_current_user_id();
+     // $this->current_user_id = get_current_user_id();
 
      // if (! $this->current_user_id)
      //     return false;
-     // if ($CI->functions->option_exists('clocker_timezone', $this->current_user_id)) {
-     //     $time_zone = $CI->functions->get_option('clocker_timezone', $this->current_user_id);
+     // if (option_exists('clocker_timezone', $this->current_user_id)) {
+     //     $time_zone = get_option('clocker_timezone', $this->current_user_id);
      // } else {
-     //     $CI->functions->add_option('clocker_timezone', $_POST['clocker_timezone'], $this->current_user_id);
-     //     $time_zone = $CI->functions->get_option('clocker_timezone', $this->current_user_id);
+     //     add_option('clocker_timezone', $_POST['clocker_timezone'], $this->current_user_id);
+     //     $time_zone = get_option('clocker_timezone', $this->current_user_id);
      // }
      date_default_timezone_set($timezone_id);
 }
@@ -100,15 +100,15 @@ function display_break_out_btn() {
 
 function check_clocker_status() {
      $CI =& get_instance();
-     $this->current_user_id = $CI->functions->get_current_user_id();
+     $this->current_user_id = get_current_user_id();
      if (! $this->current_user_id)
           return false;
 
-     if ($CI->functions->user_meta_exists('clocker_status', $this->current_user_id))
-          return $CI->functions->get_user_meta('clocker_status', $this->current_user_id);
+     if (user_meta_exists('clocker_status', $this->current_user_id))
+          return get_user_meta('clocker_status', $this->current_user_id);
      else {
-          $CI->functions->add_user_meta('clocker_status', 0, $this->current_user_id);
-          return $CI->functions->get_user_meta('clocker_status', $this->current_user_id);
+          add_user_meta('clocker_status', 0, $this->current_user_id);
+          return get_user_meta('clocker_status', $this->current_user_id);
      }
 }
 
@@ -119,9 +119,9 @@ function do_punch_in($user_id) {
 
      $data['user_id'] = $user_id;
      $data['punch_in'] = date('Y-m-d H:i:s');
-     $data['crypt_code'] = $CI->functions->encrypt_data($data['punch_in']);
+     $data['crypt_code'] = encrypt_data($data['punch_in']);
      if($CI->__globalmodule->_insert($data))
-          return $CI->functions->update_meta_user('clocker_status', 1, $user_id);
+          return update_meta_user('clocker_status', 1, $user_id);
 }
 
 function do_punch_out($user_id) {
@@ -135,7 +135,7 @@ function do_punch_out($user_id) {
      $id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE user_id = $user_id ORDER BY id desc LIMIT 1")->result()[0]->id;
 
      if($CI->__globalmodule->_update_where('id', $id_to_update, $data))
-          return $CI->functions->update_meta_user('clocker_status', 0, $user_id);
+          return update_meta_user('clocker_status', 0, $user_id);
 }
 
 function do_break_in($user_id) {
@@ -149,7 +149,7 @@ function do_break_in($user_id) {
      $id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE user_id = $user_id ORDER BY id desc LIMIT 1")->result()[0]->id;
 
      if($CI->__globalmodule->_update_where('id', $id_to_update, $data))
-          return $CI->functions->update_meta_user('clocker_status', 2, $user_id);
+          return update_meta_user('clocker_status', 2, $user_id);
 }
 
 function do_break_out($user_id) {
@@ -163,5 +163,5 @@ function do_break_out($user_id) {
      $id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE user_id = $user_id ORDER BY id desc LIMIT 1")->result()[0]->id;
 
      if($CI->__globalmodule->_update_where('id', $id_to_update, $data))
-          return $CI->functions->update_meta_user('clocker_status', 3, $user_id);
+          return update_meta_user('clocker_status', 3, $user_id);
 }

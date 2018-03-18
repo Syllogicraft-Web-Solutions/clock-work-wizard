@@ -25,15 +25,27 @@ class _dashboard extends MX_Controller {
 		$this->script_tags = $default_view['scripts'];
 		$this->link_tags = $default_view['links'];
 		$this->meta_tags = $default_view['metas'];
-		
+
+		$this->init_();
 	}
 
 	function index() {
 		$view = $this->page['module_name'] . 'index';
 		$this->page['assets_url'] = $this->assets;
 
-		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center', 'padding' => '10px'));
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center', 'padding' => '10px'));
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
+	function init_() {
+		$this->hooks();
+	}
+
+	function hooks() {
+		add_action('display_widgets_dashboard', [$this, 'asd']);
+	}
+
+	function asd() {
+		echo render_blank('components/widget', true);
+	}
 }

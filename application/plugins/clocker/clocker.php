@@ -17,27 +17,37 @@ class Clocker extends CI3_plugin_system {
         parent::__construct();
         $this->mdl_name = get_class();
         $CI =& get_instance();
-        $CI->functions->get_current_user_id();
+        $CI->load->library('functions');
+        get_current_user_id();
         require_once(__DIR__ . '/hooks.php');
+        add_action('display_widgets_dashboard', [$this, 'add_widget']);
     }
   
+    function add_widget() {
+        $data['id'] = "clocker-buttons";
+        $data['class'] = "clocker-buttons-container";
+        $data['widget_title'] = "Clocker";
+        
+        //$data['main_content'] = $this->load->view('components/widget', $data, true);
+        // var_dump(render_blank('components/widget', $data, TRUE));
+    }
     public function add_menu() {
         $CI =& get_instance();
         $uri = "mdl/" . strtolower(get_class());
-        $CI->functions->add_menu('clocker', false, base_url($uri), 'fa-clock', 'Clocker', '_clocker', 6);
+        add_menu('clocker', false, base_url($uri), 'fa-clock', 'Clocker', '_clocker', 6);
     }
 
     function set_default_timezone($timezone_id = '') {
         // $CI =& get_instance();
-        // $this->current_user_id = $CI->functions->get_current_user_id();
+        // $this->current_user_id = get_current_user_id();
 
         // if (! $this->current_user_id)
         //     return false;
-        // if ($CI->functions->option_exists('clocker_timezone', $this->current_user_id)) {
-        //     $time_zone = $CI->functions->get_option('clocker_timezone', $this->current_user_id);
+        // if (option_exists('clocker_timezone', $this->current_user_id)) {
+        //     $time_zone = get_option('clocker_timezone', $this->current_user_id);
         // } else {
-        //     $CI->functions->add_option('clocker_timezone', $_POST['clocker_timezone'], $this->current_user_id);
-        //     $time_zone = $CI->functions->get_option('clocker_timezone', $this->current_user_id);
+        //     add_option('clocker_timezone', $_POST['clocker_timezone'], $this->current_user_id);
+        //     $time_zone = get_option('clocker_timezone', $this->current_user_id);
         // }
         date_default_timezone_set($timezone_id);
     }
@@ -142,15 +152,15 @@ class Clocker extends CI3_plugin_system {
 
     public function check_clocker_status() {
         $CI =& get_instance();
-        $this->current_user_id = $CI->functions->get_current_user_id();
+        $this->current_user_id = get_current_user_id();
         if (! $this->current_user_id)
             return false;
 
-        if ($CI->functions->user_meta_exists('clocker_status', $this->current_user_id))
-            return $CI->functions->get_user_meta('clocker_status', $this->current_user_id);
+        if (user_meta_exists('clocker_status', $this->current_user_id))
+            return get_user_meta('clocker_status', $this->current_user_id);
         else {
-            $CI->functions->add_user_meta('clocker_status', 0, $this->current_user_id);
-            return $CI->functions->get_user_meta('clocker_status', $this->current_user_id);
+            add_user_meta('clocker_status', 0, $this->current_user_id);
+            return get_user_meta('clocker_status', $this->current_user_id);
         }
     }
 
@@ -161,9 +171,9 @@ class Clocker extends CI3_plugin_system {
         
         $data['user_id'] = $user_id;
         $data['punch_in'] = date('Y-m-d H:i:s');
-        $data['crypt_code'] = $CI->functions->encrypt_data($data['punch_in']);
+        $data['crypt_code'] = encrypt_data($data['punch_in']);
         if($CI->__globalmodule->_insert($data))
-            return $CI->functions->update_meta_user('clocker_status', 1, $user_id);
+            return update_meta_user('clocker_status', 1, $user_id);
     }
 
     public function do_punch_out($user_id) {
@@ -177,7 +187,7 @@ class Clocker extends CI3_plugin_system {
         $id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE user_id = $user_id ORDER BY id desc LIMIT 1")->result()[0]->id;
 
         if($CI->__globalmodule->_update_where('id', $id_to_update, $data))
-            return $CI->functions->update_meta_user('clocker_status', 0, $user_id);
+            return update_meta_user('clocker_status', 0, $user_id);
     }
 
     public function do_break_in($user_id) {
@@ -191,7 +201,7 @@ class Clocker extends CI3_plugin_system {
         $id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE user_id = $user_id ORDER BY id desc LIMIT 1")->result()[0]->id;
 
         if($CI->__globalmodule->_update_where('id', $id_to_update, $data))
-            return $CI->functions->update_meta_user('clocker_status', 2, $user_id);
+            return update_meta_user('clocker_status', 2, $user_id);
     }
 
     public function do_break_out($user_id) {
@@ -205,7 +215,7 @@ class Clocker extends CI3_plugin_system {
         $id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE user_id = $user_id ORDER BY id desc LIMIT 1")->result()[0]->id;
 
         if($CI->__globalmodule->_update_where('id', $id_to_update, $data))
-            return $CI->functions->update_meta_user('clocker_status', 3, $user_id);
+            return update_meta_user('clocker_status', 3, $user_id);
     }
 
 
@@ -227,22 +237,22 @@ class Clocker extends CI3_plugin_system {
     // Controller for plugin, used to manage the plugin, not required though.
     public function controller($data = NULL) {
         $CI =& get_instance();
-        $this->current_user_id = $CI->functions->get_current_user_id();
+        $this->current_user_id = get_current_user_id();
         $CI->load->helper('date');
         
-        $time_zone = $CI->functions->get_option('clocker_timezone', $this->current_user_id);
+        $time_zone = get_option('clocker_timezone', $this->current_user_id);
         $time_zone = $time_zone == '' ? 'UP8' : $time_zone;
 
         if(isset($_POST['save_settings'])) {
-            $this->current_user_id = $CI->functions->get_current_user_id();
+            $this->current_user_id = get_current_user_id();
             if (! $this->current_user_id)
                 return false;
-            if ($CI->functions->option_exists('clocker_timezone', $this->current_user_id)) {
-                $CI->functions->update_option('clocker_timezone', $_POST['clocker_timezone'], $this->current_user_id);
-                $time_zone = $CI->functions->get_option('clocker_timezone', $this->current_user_id);
+            if (option_exists('clocker_timezone', $this->current_user_id)) {
+                update_option('clocker_timezone', $_POST['clocker_timezone'], $this->current_user_id);
+                $time_zone = get_option('clocker_timezone', $this->current_user_id);
             } else {
-                $CI->functions->add_option('clocker_timezone', $_POST['clocker_timezone'], $this->current_user_id);
-                $time_zone = $CI->functions->get_option('clocker_timezone', $this->current_user_id);
+                add_option('clocker_timezone', $_POST['clocker_timezone'], $this->current_user_id);
+                $time_zone = get_option('clocker_timezone', $this->current_user_id);
             }
             $time_zone = $_POST['clocker_timezone'];
         }

@@ -42,7 +42,7 @@ class _plugins extends MX_Controller {
         $this->page['not_installed'] = get_orphaned_plugins();
 
         if (isset($_GET['plugin_message']) && $_GET['plugin_message'] != '') {
-            $decrypted_data = json_decode($this->functions->decrypt_data($_GET['plugin_message']));
+            $decrypted_data = json_decode(decrypt_data($_GET['plugin_message']));
             $this->page['plugin_change_message'] = (array) $decrypted_data;
         }
 
@@ -57,7 +57,7 @@ class _plugins extends MX_Controller {
                 $page_message['message'] = $message;
                 
                 $json = json_encode($page_message);
-                $encrypt = $this->functions->encrypt_data($json);
+                $encrypt = encrypt_data($json);
                 redirect(base_url('/plugins?plugin_message=' . urlencode($encrypt)));
             }
             else if ($action == 'deactivate_plugin') {
@@ -68,7 +68,7 @@ class _plugins extends MX_Controller {
                 $page_message['message'] = $message;
                 
                 $json = json_encode($page_message);
-                $encrypt = $this->functions->encrypt_data($json);
+                $encrypt = encrypt_data($json);
                 redirect(base_url('/plugins?plugin_message=' . urlencode($encrypt)));
             }
         }
@@ -87,7 +87,7 @@ class _plugins extends MX_Controller {
                 $page_message['message'] = $message;
                 
                 $json = json_encode($page_message);
-                $encrypt = $this->functions->encrypt_data($json);
+                $encrypt = encrypt_data($json);
                 redirect(base_url('/plugins?plugin_message=' . urlencode($encrypt)));
             } else if ($type == 'install_activate') {
                 $res = $this->install_activate_to_database($plugin_name);
@@ -101,13 +101,13 @@ class _plugins extends MX_Controller {
                 $page_message['message'] = $message;
                 
                 $json = json_encode($page_message);
-                $encrypt = $this->functions->encrypt_data($json);
+                $encrypt = encrypt_data($json);
                 redirect(base_url('/plugins?plugin_message=' . urlencode($encrypt)));
             }
         }
 
-		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
     }
 
     public function activate_plugin($system_name, $data = NULL) {
@@ -166,8 +166,8 @@ class _plugins extends MX_Controller {
 		$this->page['plugin'] = $data['plugin'];
 		$this->page['plugin_content'] = $data['plugin_content'];
 
-		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
     }
 
     public function view_plugin_as_mdl($plugin = false, $display = 'index') {

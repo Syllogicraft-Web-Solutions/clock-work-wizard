@@ -117,7 +117,7 @@ class __globalmodule extends MX_Controller {
 			return;
 		}
 
-		if (! $this->functions->view_exists($_GET['p'])) {
+		if (! view_exists($_GET['p'])) {
 			show_404();
 			return;
 		}

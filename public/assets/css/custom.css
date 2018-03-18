@@ -6,6 +6,7 @@ a[title="Hosted on free web hosting 000webhost.com. Host your own website for FR
 
 body {
 	margin: 0 auto;
+	display: grid;
 }
 
 #modal {
@@ -57,10 +58,10 @@ body {
 	margin-top: 10px;
 	padding: 20px 40px;
 }
-
+/* 
 .enroll-form {
-	/*width: 65%;*/
-}
+	width: 65%;
+} */
 
 .enroll-fields-container {
 	margin-top: 10px;
@@ -94,3 +95,5 @@ select {
 	margin: 0 20px;
 	display: inline-block;
 }
+
+/* Widget Style */

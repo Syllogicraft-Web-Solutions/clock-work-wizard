@@ -98,7 +98,7 @@ class Functions {
 
 	}
 
-	function render_blank($js = array(), $link = array(), $view_file = "", $data = []) {
+	function render_blank($view_file = "", $as_data = false, $js = array(), $link = array(), $data = []) {
 		$CI =& get_instance();
 		$page['page'] = $data;
 
@@ -112,6 +112,10 @@ class Functions {
 				$this->add_link($val['link_name'], $val['rel'], $val['type'], $val['href']);
 			}
 		}
+
+		if ($as_data == true)
+			return $CI->load->view($view_file, $page, TRUE);
+
 		if ($view_file != "")
 			$CI->load->view($view_file, $page); // the content
 	}

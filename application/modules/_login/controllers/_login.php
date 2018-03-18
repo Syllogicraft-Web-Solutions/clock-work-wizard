@@ -44,7 +44,7 @@ class _login extends MX_Controller {
 			$this->page['login_status'] = $result;
 		}
 
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
 	function do_login($data) {
@@ -68,7 +68,7 @@ class _login extends MX_Controller {
 						return $login_status;
 					}
 
-					if ($this->functions->compare_encrypted_data($this->encryption->encrypt($data['password']), $val->user_password)) {
+					if (compare_encrypted_data($this->encryption->encrypt($data['password']), $val->user_password)) {
 						$this->session->set_userdata('user_cookie', array(
 							'logged_in' => true,
 							'id' => $val->id

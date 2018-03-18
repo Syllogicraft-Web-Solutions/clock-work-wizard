@@ -31,8 +31,8 @@ class _users extends MX_Controller {
 		$view = $this->page['module_name'] . 'index';
 		$this->page['assets_url'] = $this->assets;
 
-		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
 	function check_user_profile($id) {
@@ -46,8 +46,8 @@ class _users extends MX_Controller {
 		$view = $this->page['module_name'] . 'index';
 		$this->page['assets_url'] = $this->assets;
 		
-		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
 	function activate_account() {
@@ -55,7 +55,7 @@ class _users extends MX_Controller {
 			$raw_ak = $_GET['activation_key'];
 			$verify = $_GET['activation_key'];
 
-			$verify = $this->functions->decrypt_data($verify);
+			$verify = decrypt_data($verify);
 			$split = explode('|', $verify);
 
 			$user_email = $split[0];
@@ -88,7 +88,7 @@ class _users extends MX_Controller {
 		$page['page_title'] = "Account has been Activated";
 		$page['assets_url'] = $this->assets;
 		$view = $this->page['module_name'] . 'account-activated.php';
-		$this->functions->render_page(false, $page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
+		render_page(false, $page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
 	}
 
 	function send_email_activation($user_activation_key, $email, $nickname) {
@@ -146,8 +146,8 @@ class _users extends MX_Controller {
 				$data = $_POST;
 				unset($data['register']);
 				unset($data['confirm_password']);
-				$data['user_password'] = $this->functions->encrypt_data($data['user_password']);
-				$data['user_activation_key'] = $this->functions->encrypt_data($data['user_email'] . '|' . $data['user_login']);
+				$data['user_password'] = encrypt_data($data['user_password']);
+				$data['user_activation_key'] = encrypt_data($data['user_email'] . '|' . $data['user_login']);
 
 				if (! empty(array_filter($data))) {
 					$this->__globalmodule->set_tablename('users');
@@ -164,7 +164,7 @@ class _users extends MX_Controller {
 					header('Location: ' . base_url('register/failed'));
 					exit();
 				} else {
-					$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+					render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 					return;
 				}
 			} else {
@@ -178,7 +178,7 @@ class _users extends MX_Controller {
 			}
 		}
 
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
 	function is_email_exists($email) {
@@ -211,21 +211,21 @@ class _users extends MX_Controller {
 		$page['page_title'] = "Successfully Signed Up";
 		$page['assets_url'] = $this->assets;
 		$view = $this->page['module_name'] . 'congratulations-page.php';
-		$this->functions->render_page(false, $page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
+		render_page(false, $page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
 	}
 
 	function registration_failed() {
 		$page['page_title'] = "Registration Failed";
 		$page['assets_url'] = $this->assets;
 		$view = $this->page['module_name'] . 'registration-failed.php';
-		$this->functions->render_page(false, $page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
+		render_page(false, $page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
 	}
 
 	/*function register_employee() {
 		$referral = isset($_GET['referral']);
 		$view = $this->page['module_name'] . 'register-employee';
 		$this->page['assets_url'] = $this->assets;
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}*/
 
 	function add_user() {
@@ -237,8 +237,8 @@ class _users extends MX_Controller {
 			
 		}
 
-		$this->functions->add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
 	function add_default_meta_key($id, $manager = '') {

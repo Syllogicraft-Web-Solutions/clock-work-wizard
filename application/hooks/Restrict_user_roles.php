@@ -34,7 +34,7 @@ class Restrict_user_roles {
             }
         }
 
-        if (! $CI->functions->is_logged_in()) {
+        if (! is_logged_in()) {
             return;
         }
 
@@ -45,7 +45,7 @@ class Restrict_user_roles {
         $methods = $restrictions['methods'];
 
         $user_id = $CI->session->userdata('user_cookie')['id'];
-        $role = $CI->functions->get_user_role($user_id);
+        $role = get_user_role($user_id);
         // if (! $role)
         //     redirect('/error/restricted');
 

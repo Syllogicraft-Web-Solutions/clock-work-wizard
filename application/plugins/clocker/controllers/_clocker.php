@@ -33,8 +33,8 @@ class _clocker extends MX_Controller {
 
         $this->page['assets_url'] = $this->assets;
 
-		$this->functions->add_sidebar('_' . $this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
-        $this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		add_sidebar('_' . $this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+        render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
     }
  
     public function install_table() {
@@ -43,7 +43,7 @@ class _clocker extends MX_Controller {
     }
     
     public function do_clockers($action, $user_id = '') {
-        $user_id = $this->functions->get_current_user_id();
+        $user_id = get_current_user_id();
         if ($action == 'punch-in')
             echo do_action('clocker.punch-in', [$user_id])[0];
         elseif ($action == 'punch-out')

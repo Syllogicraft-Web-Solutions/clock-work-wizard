@@ -33,7 +33,7 @@ class _error extends MX_Controller {
 		$this->page['page_title'] .= "400 Bad Request";
 		set_status_header(400);
 
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
 	function error_404() {
@@ -43,7 +43,7 @@ class _error extends MX_Controller {
 		set_status_header(404);
 		show_404();
 
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
 	function error_restricted() {
@@ -52,7 +52,7 @@ class _error extends MX_Controller {
 		$this->page['page_title'] .= "Restricted Page";
 		set_status_header(401);
 
-		$this->functions->render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
 }
