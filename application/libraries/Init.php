@@ -75,6 +75,11 @@ class Init extends Functions {
 				'type' => '',
 				'href' => $this->assets . 'css/custom.css'
 			), array(
+				'link_name' => 'Widgets Stylings',
+				'rel' => '',
+				'type' => '',
+				'href' => $this->assets . 'css/widgets.css'
+			), array(
 				'link_name' => 'jQuery UI CSS',
 				'rel' => '',
 				'type' => '',

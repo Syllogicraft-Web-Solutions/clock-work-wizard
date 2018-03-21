@@ -27,16 +27,17 @@ class _clockwork extends MX_Controller {
 		$this->link_tags = $default_view['links'];
 		$this->meta_tags = $default_view['metas'];
 
-		if ($this->check_user_profile($user_id))
-			header('Location: ' . base_url($this->page['module_name'] . 'edit_profile/' . $user_id));
+		// if (check_user_profile($user_id))
+		// 	header('Location: ' . base_url($this->page['module_name'] . 'edit_profile/' . $user_id));
 	}
 
 	function index() {
-		$view = $this->page['module_name'] . 'index';
+		$view = $this->page['module_name'] . 'admin';
 		$this->page['assets_url'] = $this->assets;
 
-		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
-		render_page(true, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+
+		// add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+		// render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
 	}
 
 }

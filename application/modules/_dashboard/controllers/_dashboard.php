@@ -20,7 +20,6 @@ class _dashboard extends MX_Controller {
 		$this->page['page_title'] = "Dashboard";
 		$this->page['module_name'] = $this->router->fetch_class() . '/';
 
-
 		$default_view = $this->init->default_view_vars();
 		$this->script_tags = $default_view['scripts'];
 		$this->link_tags = $default_view['links'];
@@ -42,10 +41,6 @@ class _dashboard extends MX_Controller {
 	}
 
 	function hooks() {
-		add_action('display_widgets_dashboard', [$this, 'asd']);
-	}
-
-	function asd() {
-		echo render_blank('components/widget', true);
+		// add_action('display_widgets_dashboard', [$this, 'asd']);
 	}
 }

@@ -24,13 +24,14 @@ class Clocker extends CI3_plugin_system {
     }
   
     function add_widget() {
-        $data['id'] = "clocker-buttons";
-        $data['class'] = "clocker-buttons-container";
-        $data['widget_title'] = "Clocker";
-        
+        $CI =& get_instance();
+        $file = __DIR__ . '/views/components/clocker-widget.php';
+        // $CI->load->view('components/clocker-widget');
+        render_widget('clocker-widget', 'clocker-widget-container', "Clocker", file_to_string($file), '');
         //$data['main_content'] = $this->load->view('components/widget', $data, true);
         // var_dump(render_blank('components/widget', $data, TRUE));
     }
+    
     public function add_menu() {
         $CI =& get_instance();
         $uri = "mdl/" . strtolower(get_class());
