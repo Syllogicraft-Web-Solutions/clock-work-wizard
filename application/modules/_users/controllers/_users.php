@@ -21,6 +21,7 @@ class _users extends MX_Controller {
 		$this->page['page_title'] = "Users";
 		$this->page['module_name'] = $this->router->fetch_class() . '/';
 
+		require_once(__DIR__ . '/../hooks.php');
 		$default_view = $this->init->default_view_vars();
 		$this->script_tags = $default_view['scripts'];
 		$this->link_tags = $default_view['links'];
@@ -234,7 +235,69 @@ class _users extends MX_Controller {
 
 		if(isset($_POST['add-user'])) {
 			unset($_POST['add-user']);
-			
+			if (username_exists($_POST['username'])) {
+				add_error_message("Username is already existing in our database. Please choose another.");
+			}
+
+			if (email_exists($_POST['email'])) {
+				add_error_message("Email address is already existing in our database. Please choose another.");
+			}
+
+			if (get_error_messages() && sizeof(get_error_messages()) > 0 ) {
+				display_error_messages();
+			} else {
+				$user['user_login'] = $_POST['username'];
+				$user['user_nickname'] = $_POST['nickname'];
+				$user['user_password'] = $_POST['password'];
+				$user['user_password'] = encrypt_data($_POST['password']);
+				$user['user_email'] = $_POST['email'];
+				$user['user_status'] = "0";
+				$user['user_activation_key'] = encrypt_data($user['user_email'] . '|' . $user['user_login']);
+
+
+				
+				$this->__globalmodule->set_tablename('users');
+				if ($this->__globalmodule->_insert($user)) {
+					$user_meta['first_name'] = $_POST['first_name'];
+					$user_meta['last_name'] = $_POST['last_name'];
+					$user_meta['middle_name'] = $_POST['middle_name'];
+
+					$sql = "SELECT id FROM users WHERE user_activation_key = '" . $user['user_activation_key'] . "'";
+					$this_user_id = $this->__globalmodule->_custom_query($sql)->result();
+					$id = $this_user_id[0]->id;;
+					
+					$this->add_default_meta_key($id, get_current_user_id());
+					update_user_meta('first_name', $user_meta['first_name'], $id);
+					update_user_meta('last_name', $user_meta['last_name'], $id);
+					update_user_meta('middle_name', $user_meta['middle_name'], $id);
+
+					$updated_data['user_activation_key'] = '';
+					$updated_data['user_status'] = '1';
+					$this->__globalmodule->set_tablename('users');
+					$this->__globalmodule->_update_where('user_activation_key', $user['user_activation_key'], $updated_data);
+					add_modal_before_content("<h3>Info</h3>");
+					add_modal_content('<p>User "' . $user['user_login'] . '" was added."</p>');
+					if (isset($_POST['send_email']) && $_POST['send_email'] != '') {
+						$this->load->helper('send_email');
+						$email_temp = array(
+							'nickname' => $user['user_nickname'],
+							'who_added_this' => get_user_meta('first_name', get_current_user_id()),
+							'role' => get_user_meta('user_role', $id),
+							'user_login' => $user['user_login'],
+							'user_password' => decrypt_data($user['user_password'])
+						);
+						$email = array(
+							'to' => $user['user_email'],
+							'subject' => 'Notification: Login Details - You were added.',
+							'message' => get_email_template('email/notify-user-details', $email_temp)
+						);
+						if (send_email($email))
+							add_modal_content('<p>Login details was sent to "' . $user['user_email'] . '" via email."</p>');
+					}
+					display_modal_content();
+				}
+			}
+			$_POST = array();
 		}
 
 		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
@@ -299,7 +362,10 @@ class _users extends MX_Controller {
 					'meta_value' => json_encode('employee')
 				)
 			);
-			$this->__globalmodule->_insert_batch($user_meta_keys);
+			if ($this->__globalmodule->_insert_batch($user_meta_keys))
+				return true;
+			else
+				return false;
 		} else {
 			$user_meta_keys = array(
 				array(
@@ -308,7 +374,10 @@ class _users extends MX_Controller {
 					'meta_value' => json_encode('manager')
 				)
 			);
-			$this->__globalmodule->_insert_batch($user_meta_keys);
+			if ($this->__globalmodule->_insert_batch($user_meta_keys))
+				return true;
+			else
+				return false;
 		}
 	}
 

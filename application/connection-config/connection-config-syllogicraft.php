@@ -12,14 +12,6 @@
           $username = 'epiz_21585450';
           $password = 'syllogicraft123';
           $database_name = 'epiz_21585450_cww';
-     } elseif (strpos($_SERVER['HTTP_HOST'], 'codeanyapp')) {
-          $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/';
-          // exit($url);
-          $url = $url;
-          $host = 'localhost';
-          $username = 'root';
-          $password = '';
-          $database_name = 'cww';
      } else {
           $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/cww/';
           // exit($url);

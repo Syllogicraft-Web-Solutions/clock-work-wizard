@@ -400,7 +400,7 @@ class Functions {
 		}
 	}
 
-	function update_meta_user($meta_key, $meta_value, $user_id) {
+	function update_user_meta($meta_key, $meta_value, $user_id) {
 		$CI =& get_instance();
 		$value = json_encode($meta_value);
 

@@ -80,9 +80,9 @@ class __globalmodule extends MX_Controller {
 		return $this->__globalmodel->_insert_batch($data);
 	}
 
-	public function _update_where($col, $id, $data) {
+	public function _update_where($col, $value, $data) {
 		$this->load->model('__globalmodel');
-		return $this->__globalmodel->_update_where($col, $id, $data);
+		return $this->__globalmodel->_update_where($col, $value, $data);
 	}
 	
 

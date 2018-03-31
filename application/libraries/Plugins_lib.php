@@ -722,11 +722,11 @@ class Plugins_lib {
                     // No arguments/null
                     if( ! $args)
                     {
-                        call_user_func( $a['function'] );
+                        return call_user_func( $a['function'] );
                     }
                     else
                     {
-                        call_user_func_array( $a['function'], $args );
+                        return call_user_func_array( $a['function'], $args );
                     }
                 }
                 // Filters
@@ -735,11 +735,11 @@ class Plugins_lib {
                     // No arguments/null
                     if( ! $args)
                     {
-                        $args = call_user_func( $a['function'] );
+                        return $args = call_user_func( $a['function'] );
                     }
                     else
                     {
-                        $args = call_user_func_array( $a['function'], $args );
+                        return $args = call_user_func_array( $a['function'], $args );
                     }
                 }
             }

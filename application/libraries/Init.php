@@ -8,6 +8,11 @@ class Init extends Functions {
 	var $redirect;
 	var $assets;
 
+	var $script_tags;
+	var $link_tags;
+	var $meta_tags;
+
+
 	function __construct() {
 		$this->redirect_url_save();
 		$this->display_menu_links();
@@ -34,7 +39,7 @@ class Init extends Functions {
 	}
 
 	function default_view_vars() {
-		$script_tags = array(
+		$this->script_tags = array(
 			array(
 				'script_name' => 'jQuery',
 				'src' => $this->assets . 'jquery/jquery-3.2.1.min.js',
@@ -57,7 +62,7 @@ class Init extends Functions {
 				'attrs' => array()
 			)
 		);
-		$link_tags = array(
+		$this->link_tags = array(
 			array(
 				'link_name' => 'W3.CSS',
 				'rel' => '',
@@ -96,14 +101,14 @@ class Init extends Functions {
 				'href' => $this->assets . 'img/logo.png'
 			)
 		);
-		$meta_tags = array(
+		$this->meta_tags = array(
 			array(
 				'meta_name' => 'Viewport',
 				'name' => 'viewport',
 				'content' => 'width=device-width, initial-scale=1'
 			)
 		);
-		return array('scripts' => $script_tags, 'links' => $link_tags, 'metas' => $meta_tags);
+		return array('scripts' => $this->script_tags, 'links' => $this->link_tags, 'metas' => $this->meta_tags);
 	}
 
 	function load_admin_vars() {

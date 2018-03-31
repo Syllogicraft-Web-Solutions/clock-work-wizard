@@ -65,6 +65,8 @@ function render_page($display_header = false, $page_title = "", $js = array(), $
         }
     }
 
+    $CI->load->view('head/html-end-head.php'); //end head tag
+
     if ($preloader) {
         $view = "components/pre-loader-";
         if (view_exists($view . $preloader))
@@ -72,8 +74,6 @@ function render_page($display_header = false, $page_title = "", $js = array(), $
         else
             $CI->load->view($view . '94');
     }
-
-    $CI->load->view('head/html-end-head.php'); //end head tag
 
     if ($display_header)
         $CI->load->view('components/header-logged-in'); //end head tag
@@ -279,6 +279,132 @@ function file_to_string($file) {
     return $string;
 }
 
+$error_messages = array();
+function add_error_message($message) {
+    global $error_messages;
+
+    $error_messages[] = $message;
+}
+
+function get_error_messages() {
+    global $error_messages;
+
+    return $error_messages;
+}
+
+function modal_bool($bool = true) {
+    $style = "";
+    if ($bool)
+        $style = 'style="display: block !important;"';
+    echo $style;
+}
+
+function overlay_bool($bool = true) {
+    $style = "";
+    if ($bool)
+        $style = 'style="display: block !important;"';
+    echo $style;
+}
+
+function return_modal_content() {
+    $true_content = "";
+    global $error_messages;
+    $content = $error_messages;
+
+    if ($content != NULL && sizeof($content) > 0) {
+        foreach ($content as $key => $value) {
+            $true_content .= "<p>$value</p>";
+        }
+    }
+    echo $true_content;
+}
+
+function display_error_messages() {
+    global $error_messages;
+    add_action('overlay.display_bool', 'overlay_bool');
+    add_action('modal.display_bool', 'modal_bool');
+    add_action('modal.do_content', 'return_modal_content');
+}
+
+/** Modal Displays functions helpers */
+$modal_before_content = array();
+$modal_content = array();
+$modal_after_content = array();
+
+    
+// exit(gettype($modal_after_content));
+function add_modal_before_content($message) {
+    global $modal_before_content;
+    $modal_before_content[] = $message;
+}
+
+function add_modal_content($message) {
+    global $modal_content;
+    $modal_content[] = $message;
+}
+
+function add_modal_after_content($message) {
+    global $modal_after_content;
+    $modal_after_content[] = $message;
+}
+
+function get_modal_content() {
+    global $modal_content;
+
+    return $modal_content;
+}
+
+function modal_before_content() {
+    $true_content = "";
+    global $modal_before_content;
+
+    $content = $modal_before_content;
+
+    if ($content != NULL && sizeof($content) > 0) {
+        foreach ($content as $key => $value) {
+            $true_content .= "<p>$value</p>";
+        }
+    }
+    echo $true_content;
+}
+
+function modal_content() {
+    $true_content = "";
+    global $modal_content;
+    $content = $modal_content;
+
+    if ($content != NULL && sizeof($content) > 0) {
+        foreach ($content as $key => $value) {
+            $true_content .= "<p>$value</p>";
+        }
+    }
+    echo $true_content;
+}
+
+function modal_after_content() {
+    $true_content = "";
+    global $modal_after_content;
+    $content = $modal_after_content;
+
+    if ($content != NULL && sizeof($content) > 0) {
+        foreach ($content as $key => $value) {
+            $true_content .= "<p>$value</p>";
+        }
+    }
+    echo $true_content;
+}
+
+function display_modal_content() {
+    global $modal_content;
+    add_action('overlay.display_bool', 'overlay_bool');
+    add_action('modal.display_bool', 'modal_bool');
+    add_action('modal.before_do_content', 'modal_before_content');
+    add_action('modal.do_content', 'modal_content');
+    add_action('modal.after_do_content', 'modal_after_content');
+}
+
+
+
 /**
 *
 * Backend Functions
@@ -417,7 +543,7 @@ function add_user_meta($meta_key, $meta_value, $user_id) {
     }
 }
 
-function update_meta_user($meta_key, $meta_value, $user_id) {
+function update_user_meta($meta_key, $meta_value, $user_id) {
     $CI =& get_instance();
     $value = json_encode($meta_value);
 
@@ -446,7 +572,22 @@ function get_current_user_id() {
 }
 
 function user_meta_exists($meta_key, $user_id) {
-    if (strlen(get_user_meta($meta_key, $user_id)) > 0) {
+    
+    $CI =& get_instance();
+
+    $CI->load->module('__globalmodule');
+    $CI->__globalmodule->set_tablename('user_meta');
+    $table = $CI->__globalmodule->get_tablename();
+
+    $query = "SELECT id FROM $table WHERE meta_key = '$meta_key'";
+
+    $query .= " AND user_id = " . $user_id;
+
+    $query .= " LIMIT 1 ";
+    // exit($query);
+    $data = $CI->__globalmodule->_custom_query($query)->result();
+
+    if (isset($data[0])) {
         return true;
     } else {
         return false;
@@ -513,4 +654,44 @@ function get_user_role($user_id) { // checks the capability of current user
     }
 
     return $res ? json_decode($res) : $res;
+}
+
+function username_exists($username) {
+    $CI =& get_instance();
+    $CI->__globalmodule->set_tablename('user_meta');
+    $query = "SELECT * FROM users WHERE user_login = '$username'";
+    $result = $CI->__globalmodule->_custom_query($query)->result();
+    // var_dump( $result );
+    
+    if (isset($_GET['return']) == 'json') {
+        if (sizeof($result) > 0)
+            echo json_encode(true);
+        else
+            echo json_encode(false);
+    } else {
+        if (sizeof($result) > 0)
+            return true;
+        else 
+            return false;
+    }
+}
+
+function email_exists($email) {
+    $CI =& get_instance();
+    $CI->__globalmodule->set_tablename('user_meta');
+    $query = "SELECT * FROM users WHERE user_email = '$email'";
+    $result = $CI->__globalmodule->_custom_query($query)->result();
+    // var_dump( $result );
+    
+    if (isset($_GET['return']) == 'json') {
+        if (sizeof($result) > 0)
+            echo json_encode(true);
+        else
+            echo json_encode(false);
+    } else {
+        if (sizeof($result) > 0)
+            return true;
+        else 
+            return false;
+    }
 }

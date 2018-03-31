@@ -10,20 +10,21 @@ body {
 }
 
 #modal {
-	z-index: 2;
+	z-index: 10;
 	position: absolute;
 	display: none;
-	top: 100px;
-	bottom: 100px;
-	left: 100px;
-	right: 100px;
+	top: 50px;
+	bottom: 50px;
+	left: 50px;
+	right: 50px;
+	overflow-y: auto;
 }
 
 #overlay {
-	z-index: 2;
+	z-index: 5;
 	background-color: #000;
 	opacity: 0.50;
-	position: absolute;
+	position: fixed;
 	top: 0;
 	bottom: 0;
 	right: 0;

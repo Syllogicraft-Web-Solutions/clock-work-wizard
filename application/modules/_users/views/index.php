@@ -4,13 +4,16 @@
 
 <div class="w3-container">
 	<h2>Users</h2>
+	<section class="w3-container w3-padding">
+
+		<a class="w3-button w3-theme-action w3-hover-theme" href="<?= base_url('_users/add_user') ?>"><i class="fa fa-plus" aria-hidden="true"></i> Add User</a>
+		<a class="w3-button w3-theme-action w3-hover-theme" href="<?= base_url('_users/edit_user') ?>"><i class="fa fa-cog" aria-hidden="true"></i> Profile Setting</a>
+
+		<div class="users-content w3-margin-top">
+			<?php
+				do_action('users.index.do_content');
+			?>
+		</div>
+
+	</section>
 </div>
-<section class="w3-container w3-padding">
-
-	<a class="w3-button w3-theme-action w3-hover-theme" href="<?= base_url('_users/add_user') ?>"><i class="fa fa-plus" aria-hidden="true"></i> Add User</a>
-	<a class="w3-button w3-theme-action w3-hover-theme" href="<?= base_url('_users/edit_user') ?>"><i class="fa fa-cog" aria-hidden="true"></i> Profile Setting</a>
-
-	
-
-
-</section>

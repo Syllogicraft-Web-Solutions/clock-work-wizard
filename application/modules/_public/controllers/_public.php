@@ -55,4 +55,10 @@ class _public extends MX_Controller {
 		
 		echo date('d', time());
 	}
+
+	public function tester() {
+		$this->load->helper('custom_string');
+
+		var_dump(is_starts_with_vowel('Ehhhh'));
+	}
 }

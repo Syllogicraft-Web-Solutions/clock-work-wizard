@@ -6,9 +6,9 @@
 	<h2>Options</h2>
 </div>
 <section class="w3-container w3-padding">
+	<div class="options-display-settings-forms">
 
-	<a class="w3-button w3-theme-action w3-hover-theme" href="">Save</a>
+		<?php do_action('options.display_settings_forms'); ?>
 
-
-
+	</div>
 </section>

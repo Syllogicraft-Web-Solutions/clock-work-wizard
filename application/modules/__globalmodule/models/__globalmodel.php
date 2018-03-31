@@ -102,9 +102,9 @@ class __globalmodel extends CI_Model {
 		return $this->db->insert_batch($table, $data);
 	}
 
-	function _update_where($column, $id, $data) {
+	function _update_where($column, $value, $data) {
 		$table = $this->get_table();
-		$this->db->where($column, $id);
+		$this->db->where($column, $value);
 		return $this->db->update($table, $data);
 	}
 }

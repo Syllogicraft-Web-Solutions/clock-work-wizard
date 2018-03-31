@@ -35,7 +35,10 @@ class Clocker extends CI3_plugin_system {
     public function add_menu() {
         $CI =& get_instance();
         $uri = "mdl/" . strtolower(get_class());
-        add_menu('clocker', false, base_url($uri), 'fa-clock', 'Clocker', '_clocker', 6);
+        if (get_current_user_id()) {
+            if (get_user_role(get_current_user_id()) == 'admin')
+                add_menu('clocker', false, base_url($uri), 'fa-clock', 'Clocker', '_clocker', 6);
+        }
     }
 
     function set_default_timezone($timezone_id = '') {
@@ -174,7 +177,7 @@ class Clocker extends CI3_plugin_system {
         $data['punch_in'] = date('Y-m-d H:i:s');
         $data['crypt_code'] = encrypt_data($data['punch_in']);
         if($CI->__globalmodule->_insert($data))
-            return update_meta_user('clocker_status', 1, $user_id);
+            return update_user_meta('clocker_status', 1, $user_id);
     }
 
     public function do_punch_out($user_id) {
@@ -188,7 +191,7 @@ class Clocker extends CI3_plugin_system {
         $id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE user_id = $user_id ORDER BY id desc LIMIT 1")->result()[0]->id;
 
         if($CI->__globalmodule->_update_where('id', $id_to_update, $data))
-            return update_meta_user('clocker_status', 0, $user_id);
+            return update_user_meta('clocker_status', 0, $user_id);
     }
 
     public function do_break_in($user_id) {
@@ -202,7 +205,7 @@ class Clocker extends CI3_plugin_system {
         $id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE user_id = $user_id ORDER BY id desc LIMIT 1")->result()[0]->id;
 
         if($CI->__globalmodule->_update_where('id', $id_to_update, $data))
-            return update_meta_user('clocker_status', 2, $user_id);
+            return update_user_meta('clocker_status', 2, $user_id);
     }
 
     public function do_break_out($user_id) {
@@ -216,7 +219,7 @@ class Clocker extends CI3_plugin_system {
         $id_to_update = $CI->__globalmodule->_custom_query("SELECT id FROM $table WHERE user_id = $user_id ORDER BY id desc LIMIT 1")->result()[0]->id;
 
         if($CI->__globalmodule->_update_where('id', $id_to_update, $data))
-            return update_meta_user('clocker_status', 3, $user_id);
+            return update_user_meta('clocker_status', 3, $user_id);
     }
 
 
@@ -280,5 +283,9 @@ class Clocker extends CI3_plugin_system {
     {
 
         log_message('info', "[{$prefix}] " . __METHOD__ . ": Logging stuff - " . ((is_array($data) || is_object($data)) ? serialize($data) : $data));
+    }
+
+    public function display_settings() {
+        
     }
 }
