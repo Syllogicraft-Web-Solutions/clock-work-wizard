@@ -10,3 +10,7 @@ function is_starts_with_vowel($string) {
      }
      return false;
 }
+
+/* function change_char_to_this($from, $to) {
+     return str_replace($from, $to);
+} */

@@ -27,6 +27,7 @@
 			</div>
 		</div>
 		<div class="fields w3-row-padding">
+			<h4>Login details</h4>
 			<div class="w3-margin">
 				<label for="username">Username</label>
 				<input id="username" class="w3-input w3-border-theme" required type="text" name="username" value="<?= isset($_POST['username']) ? $_POST['username'] : '' ?>">

@@ -91,12 +91,12 @@ class Clocker extends CI3_plugin_system {
         <button id="punch-in-btn" class="w3-button w3-ripple w3-theme-action w3-hover-theme">Punch in</button>
         <script>
             jQuery('#punch-in-btn').click(function() {
+                if (! confirm("Confirm action: 'Punch In'"))
+                    return;
+
                 jQuery.post('<?= base_url('clocker/_clocker/do_clockers/punch-in/' . $this->current_user_id) ?>', function(data) {
                     console.log(data);
-                    if (data)
-                        window.location = window.location;
-                    else
-                        alert("Unable to do action, please try refreshing the page.");
+                    window.location = window.location;
                 })
             });
         </script>
@@ -108,12 +108,12 @@ class Clocker extends CI3_plugin_system {
         <button id="punch-out-btn" class="w3-button w3-red">Punch out</button>
         <script>
             jQuery('#punch-out-btn').click(function() {
+                if (! confirm("Confirm action: 'Punch Out'"))
+                    return;
+
                 jQuery.post('<?= base_url('clocker/_clocker/do_clockers/punch-out/' . $this->current_user_id) ?>', function(data) {
                     console.log(data);
-                    if (data)
-                        window.location = window.location;
-                    else
-                        alert("Unable to do action, please try refreshing the page.");
+                    window.location = window.location;
                 })
             });
         </script>
@@ -125,12 +125,12 @@ class Clocker extends CI3_plugin_system {
         <button id="break-in-btn" class="w3-button w3-ripple w3-theme-l1 w3-hover-theme">Break</button>
         <script>
             jQuery('#break-in-btn').click(function() {
+                if (! confirm("Confirm action: 'Break In'"))
+                    return;
+
                 jQuery.post('<?= base_url('clocker/_clocker/do_clockers/break-in/' . $this->current_user_id) ?>', function(data) {
                     console.log(data);
-                    if (data)
-                        window.location = window.location;
-                    else
-                        alert("Unable to do action, please try refreshing the page.");
+                    window.location = window.location;
                 })
             });
         </script>
@@ -142,12 +142,12 @@ class Clocker extends CI3_plugin_system {
         <button id="break-out-btn" class="w3-button w3-orange">Stop break</button>
         <script>
             jQuery('#break-out-btn').click(function() {
+                if (! confirm("Confirm action: 'Punch In'"))
+                    return;
+
                 jQuery.post('<?= base_url('clocker/_clocker/do_clockers/break-out/' . $this->current_user_id) ?>', function(data) {
                     console.log(data);
-                    if (data)
-                        window.location = window.location;
-                    else
-                        alert("Unable to do action, please try refreshing the page.");
+                    window.location = window.location;
                 })
             });
         </script>

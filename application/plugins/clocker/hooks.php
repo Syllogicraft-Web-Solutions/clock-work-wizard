@@ -31,8 +31,11 @@ do_action('clocker.default_timezone', ['Asia/Manila']);
 /**
  * Start adding hooks here
  */
-
-
+function remove_clocker_status_on_edit_profile($data) {
+     if ($data == 'clocker_status')
+          return 'remove';
+}
+add_action('users.edit_profile.filter_meta_key.remove_meta', 'remove_clocker_status_on_edit_profile');
 
 
 /** Don't remove this */

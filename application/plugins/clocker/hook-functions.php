@@ -1,6 +1,7 @@
 <?php
 
 
+/*
 function set_default_timezone($timezone_id = '') {
      // $CI =& get_instance();
      // $this->current_user_id = get_current_user_id();

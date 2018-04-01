@@ -44,11 +44,31 @@ class _users extends MX_Controller {
 	}
 
 	function edit_profile($id) {
-		$view = $this->page['module_name'] . 'index';
-		$this->page['assets_url'] = $this->assets;
-		
+		$view = $this->page['module_name'] . 'edit-profile';
+		$page['assets_url'] = $this->assets;
+		$page['id'] = $id;
+		if (! is_user_exists($id)) {
+			show_404();
+			return;
+		}
+		if (get_user_role(get_current_user_id()) == 'admin' || get_user_role(get_current_user_id()) == 'manager') {
+			if (! is_user_capable_to_this_user(get_current_user_id(), $id)) {
+				show_404();
+				return;
+			}
+		}
+		$page['user_data'] = get_all_user_metas($id);
+
+		if (isset($_POST['update_user'])) {
+			unset($_POST['udpate_user']);
+			foreach ($_POST as $meta_key => $meta_value) {
+				if ($meta_key == 'update_user')
+					continue;
+				update_user_meta($meta_key, $meta_value, $id);
+			}
+		}
 		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
-		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
 	}
 
 	function activate_account() {

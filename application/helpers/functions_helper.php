@@ -330,9 +330,6 @@ function display_error_messages() {
 $modal_before_content = array();
 $modal_content = array();
 $modal_after_content = array();
-
-    
-// exit(gettype($modal_after_content));
 function add_modal_before_content($message) {
     global $modal_before_content;
     $modal_before_content[] = $message;
@@ -403,7 +400,51 @@ function display_modal_content() {
     add_action('modal.after_do_content', 'modal_after_content');
 }
 
+/** Generate input fields */
+function generate_textfield($field_name = '', $name = '', $value) {
+?>
+    <div class="w3-margin">
+        <label for="<?= $name ?>"><?= $field_name ?></label>
+        <input id="<?= $name ?>" class="w3-input w3-border-theme" type="text" name="<?= $name ?>" value="<?= $value ?>">
+    </div>
+<?php
+}
+function generate_numberfield($field_name = '', $name = '', $value) {
+?>
+    <div class="w3-margin">
+        <label for="<?= $name ?>"><?= $field_name ?></label>
+        <input id="<?= $name ?>" class="w3-input w3-border-theme" type="text" name="<?= $name ?>" value="<?= $value ?>">
+        <script>
+            jQuery('#<?= $name ?>').on('keyup', function(e) {
+                if (isNaN(e.key)) {
+                    var old = jQuery(this).val();
+                    var _new = '';
+                    for (var i = 0; i < old.length -1; i++) {
+                        _new += '' + old[i];
+                    }
+                    jQuery(this).val(_new);
+                }
+            });
+        </script>
+    </div>
+<?php
+}
 
+function generate_date_field($field_name = '', $name = '', $value) {
+?>
+    <div class="w3-margin">
+        <label for="<?= $name ?>"><?= $field_name ?></label>
+        <input id="<?= $name ?>" class="w3-input w3-border-theme date-field-chooser" type="text" name="<?= $name ?>" value="<?= $value ?>">
+        <script>
+            jQuery('#<?= $name ?>.date-field-chooser').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "c-99:c+1"
+            });
+        </script>
+    </div>
+<?php
+}
 
 /**
 *
@@ -571,6 +612,23 @@ function get_current_user_id() {
     return false;
 }
 
+function get_username($user_id) {
+    $CI =& get_instance();
+    $CI->__globalmodule->set_tablename('users');
+    $table = $CI->__globalmodule->get_tablename();
+    $id = $CI->__globalmodule->_custom_query("SELECT user_login FROM $table WHERE id = $user_id")->result();
+
+    if (isset($id[0]))
+        return $id[0]->user_login;
+}
+
+function get_all_user_metas($user_id) {
+    $CI =& get_instance();
+    $CI->__globalmodule->set_tablename('user_meta');
+    $table = $CI->__globalmodule->get_tablename();
+    return $CI->__globalmodule->_custom_query("SELECT * FROM $table WHERE user_id = $user_id")->result();
+}
+
 function user_meta_exists($meta_key, $user_id) {
     
     $CI =& get_instance();
@@ -654,6 +712,13 @@ function get_user_role($user_id) { // checks the capability of current user
     }
 
     return $res ? json_decode($res) : $res;
+}
+
+function is_user_capable_to_this_user($user_id, $to_this_user_id) {
+    $is_this_id = get_user_meta('manager', $to_this_user_id);
+    if ($is_this_id == $user_id || get_current_user_id() == $to_this_user_id)
+        return true;
+    return false;
 }
 
 function username_exists($username) {
