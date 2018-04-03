@@ -46,7 +46,7 @@
 			</div>
 		</div>
 		<div class="fields w3-right w3-inline-block" style="width: 30%; margin-top: 20px; margin-right: -10px;">
-			<button id="register_submit" name="add-user" class="w3-button w3-theme-action w3-hover-theme" style="width: 100%;">Save</button>
+			<button id="register_submit" name="add_user" class="w3-button w3-theme-action w3-hover-theme" style="width: 100%;">Save</button>
 		</div>
 	</div>
 </form>

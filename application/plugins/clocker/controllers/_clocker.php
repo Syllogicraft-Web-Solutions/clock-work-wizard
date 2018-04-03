@@ -32,6 +32,17 @@ class _clocker extends MX_Controller {
         $view = $this->page['module_name'] . 'index';
 
         $this->page['assets_url'] = $this->assets;
+        $this->page['data'] = array();
+
+        if (! is_logged_in())
+            return;
+
+        if (get_user_role(get_current_user_id()) == 'manager') {
+            $this->page['data']['data'] = encrypt_data(get_current_user_id());
+        } else
+            $this->page['data']['data'] = encrypt_data('false');
+
+        log_message('error', "DATA MANA: " . get_current_user_id());
 
 		add_sidebar('_' . $this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
         render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);

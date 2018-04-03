@@ -100,5 +100,6 @@ class _login extends MX_Controller {
 
 	function do_logout() {
 		$this->session->unset_userdata('user_cookie');
+		header('Location: ' . base_url());
 	}
 }

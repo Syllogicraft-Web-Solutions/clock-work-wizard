@@ -6,7 +6,7 @@ $classes = array(
 	'admin' => array(
 	),
 	'manager' => array(
-		'_options', '_plugins'
+		'_options'
 	),
 	'employee' => array(
 		'_options', '_plugins'

@@ -21,6 +21,9 @@ add_action('clocker.break-out', [$this, 'do_break_out']);
 
 add_action('clocker.default_timezone', [$this, 'set_default_timezone']);
 add_action('clocker.clock', [$this, 'nyea'], 10);
+
+
+add_action('clocker.get_clocker_status', [$this, 'get_clocker_status']);
 //add_action('hello.person', [$this,'hello_age'], 4);
 //add_action('hello.person', [$this,'hello_name'], 3);
 //add_action('hello.person', [$this,'hello_height'], 3);

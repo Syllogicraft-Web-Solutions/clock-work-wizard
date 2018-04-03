@@ -48,12 +48,12 @@ class __globalmodule extends MX_Controller {
 
 	public function _update($id, $data) {
 		$this->load->model('__globalmodel');
-		$this->__globalmodel->_update($id, $data);
+		return $this->__globalmodel->_update($id, $data);
 	}
 
 	public function _delete($id) {
 		$this->load->model('__globalmodel');
-		$this->__globalmodel->_delete($id);
+		return $this->__globalmodel->_delete($id);
 	}
 
 	public function count_where($column, $value) {

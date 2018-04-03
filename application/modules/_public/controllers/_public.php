@@ -59,6 +59,22 @@ class _public extends MX_Controller {
 	public function tester() {
 		$this->load->helper('custom_string');
 
-		var_dump(is_starts_with_vowel('Ehhhh'));
+		// var_dump(is_starts_with_vowel('Ehhhh'));
+
+		echo encrypt_data(1);
+	}
+
+	public function gen_qrcode() {
+		if (isset($_GET['data']) && $_GET['data'] != '') {
+			$this->load->library('ciqrcode');
+			header("Content-Type: image/png");
+			$params['data'] = $_GET['data'];
+			$this->ciqrcode->generate($params);
+		} else {
+			$this->load->library('ciqrcode');
+			header("Content-Type: image/png");
+			$params['data'] = 'false';
+			$this->ciqrcode->generate($params);
+		}
 	}
 }

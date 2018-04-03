@@ -401,19 +401,53 @@ function display_modal_content() {
 }
 
 /** Generate input fields */
-function generate_textfield($field_name = '', $name = '', $value) {
+function generate_textfield($field_name = '', $name = '', $value, $required = false) {
 ?>
     <div class="w3-margin">
         <label for="<?= $name ?>"><?= $field_name ?></label>
-        <input id="<?= $name ?>" class="w3-input w3-border-theme" type="text" name="<?= $name ?>" value="<?= $value ?>">
+        <input id="<?= $name ?>" <?= $required ? 'required' : '' ?> class="w3-input w3-border-theme" type="text" name="<?= $name ?>" value="<?= $value ?>">
     </div>
 <?php
 }
-function generate_numberfield($field_name = '', $name = '', $value) {
+
+function generate_passwordfield($field_name = '', $name = '', $value, $required = false) {
 ?>
     <div class="w3-margin">
         <label for="<?= $name ?>"><?= $field_name ?></label>
-        <input id="<?= $name ?>" class="w3-input w3-border-theme" type="text" name="<?= $name ?>" value="<?= $value ?>">
+        <input id="<?= $name ?>" <?= $required ? 'required' : '' ?> class="w3-input w3-border-theme" type="password" name="<?= $name ?>" value="<?= $value ?>">
+    </div>
+<?php
+}
+
+function generate_emailfield($field_name = '', $name = '', $value, $required = false) {
+?>
+    <div class="w3-margin">
+        <label for="<?= $name ?>"><?= $field_name ?></label>
+        <input id="<?= $name ?>" <?= $required ? 'required' : '' ?> class="w3-input w3-border-theme" type="email" name="<?= $name ?>" value="<?= $value ?>">
+    </div>
+<?php
+}
+
+function generate_countryfield($field_name = '', $name = '', $value, $required = false) {
+?>
+    <div class="w3-margin">
+        <label for="<?= $name ?>"><?= $field_name ?></label>
+        <input id="<?= $name ?>" <?= $required ? 'required' : '' ?> autocomplete="off" class="w3-input w3-border-theme" type="text" name="<?= $name ?>" value="<?= $value ?>">
+        <script>
+            jQuery('#<?= $name ?>').autocomplete({
+                source: <?= file_get_contents(base_url('public/assets/json/countries.php')) ?>,
+                length: 30
+            });
+        </script>
+    </div>
+<?php
+}
+
+function generate_numberfield($field_name = '', $name = '', $value, $required = false) {
+?>
+    <div class="w3-margin">
+        <label for="<?= $name ?>"><?= $field_name ?></label>
+        <input id="<?= $name ?>" <?= $required ? 'required' : '' ?> class="w3-input w3-border-theme" type="text" name="<?= $name ?>" value="<?= $value ?>">
         <script>
             jQuery('#<?= $name ?>').on('keyup', function(e) {
                 if (isNaN(e.key)) {
@@ -430,11 +464,11 @@ function generate_numberfield($field_name = '', $name = '', $value) {
 <?php
 }
 
-function generate_date_field($field_name = '', $name = '', $value) {
+function generate_date_field($field_name = '', $name = '', $value, $required = false) {
 ?>
     <div class="w3-margin">
         <label for="<?= $name ?>"><?= $field_name ?></label>
-        <input id="<?= $name ?>" class="w3-input w3-border-theme date-field-chooser" type="text" name="<?= $name ?>" value="<?= $value ?>">
+        <input id="<?= $name ?>" <?= $required ? 'required' : '' ?> class="w3-input w3-border-theme date-field-chooser" type="text" name="<?= $name ?>" value="<?= $value ?>">
         <script>
             jQuery('#<?= $name ?>.date-field-chooser').datepicker({
                 changeMonth: true,
@@ -610,6 +644,16 @@ function get_current_user_id() {
     if ($CI->session->has_userdata('user_cookie'))
         return $CI->session->userdata('user_cookie')['id'];
     return false;
+}
+
+function get_email($user_id) {
+    $CI =& get_instance();
+    $CI->__globalmodule->set_tablename('users');
+    $table = $CI->__globalmodule->get_tablename();
+    $id = $CI->__globalmodule->_custom_query("SELECT user_email FROM $table WHERE id = $user_id")->result();
+
+    if (isset($id[0]))
+        return $id[0]->user_email;
 }
 
 function get_username($user_id) {

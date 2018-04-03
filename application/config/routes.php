@@ -76,6 +76,12 @@ $route['register/account-activated'] = "_users/account_activated";
 $route['verify-account'] = '_users/activate_account';
 $route['display-page'] = '__globalmodule/display_page';
 
+// include_once('')
+$route['api/(:any)'] = "api/_api/$1";
+$route['api/(:any)/(:any)'] = "api/_api/$1/$2";
+$route['api/v1/(:any)'] = "api/_api/v1/$1";
+$route['api/v1/(:any)/(:any)'] = "api/_api/v1/$1/$2";
+
 /**
 * Custom Error pages
 */

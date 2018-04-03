@@ -41,7 +41,7 @@ class Check_session {
         //     }
         // }
 
-        if (! $this->session->userdata('user_cookie')) {
+        if (! $this->session->has_userdata('user_cookie')) {
             header('Location: ' . base_url('login') . '?ref=' . $this->session->userdata('redirect_here')) ;
         }
     }

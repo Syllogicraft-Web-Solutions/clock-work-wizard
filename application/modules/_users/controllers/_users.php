@@ -52,13 +52,11 @@ class _users extends MX_Controller {
 			return;
 		}
 		if (get_user_role(get_current_user_id()) == 'admin' || get_user_role(get_current_user_id()) == 'manager') {
-			if (! is_user_capable_to_this_user(get_current_user_id(), $id)) {
+			if (! is_user_capable_to_this_user(get_current_user_id(), $id) && get_user_role(get_current_user_id()) != 'admin') {
 				show_404();
 				return;
 			}
 		}
-		$page['user_data'] = get_all_user_metas($id);
-
 		if (isset($_POST['update_user'])) {
 			unset($_POST['udpate_user']);
 			foreach ($_POST as $meta_key => $meta_value) {
@@ -66,7 +64,86 @@ class _users extends MX_Controller {
 					continue;
 				update_user_meta($meta_key, $meta_value, $id);
 			}
+			add_modal_before_content("<h3>Info</h3>");
+			add_modal_content('<p>Profile was updated!</p>');
+			display_modal_content();
 		}
+		$page['user_data'] = get_all_user_metas($id);
+		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
+	}
+
+	function edit_account($id) {
+		$view = $this->page['module_name'] . 'edit-account';
+		$page['assets_url'] = $this->assets;
+		$page['id'] = $id;
+		if (! is_user_exists($id)) {
+			show_404();
+			return;
+		}
+		if (get_user_role(get_current_user_id()) == 'admin' || get_user_role(get_current_user_id()) == 'manager') {
+			if (! is_user_capable_to_this_user(get_current_user_id(), $id)) {
+				show_404();
+				return;
+			}
+		}
+		
+		if (isset($_POST['update_account'])) {
+			unset($_POST['update_account']);
+
+			if (! get_username($id) == $_POST['user_login']) {
+				if (username_exists($_POST['user_login'])) {
+					add_error_message("Username is already existing in our database. Please choose another.");
+				}
+			}
+			
+			if (! get_email($id) == $_POST['user_email']) {
+				if (email_exists($_POST['user_email'])) {
+					add_error_message("Email address is already existing in our database. Please choose another.");
+				}
+			}
+
+			if ($_POST['user_password'] != $_POST['confirm_password']) {
+				if (email_exists($_POST['user_email'])) {
+					add_error_message("New password doesn't match with Confirm new password");
+				}
+			}
+
+			if (get_error_messages() && sizeof(get_error_messages()) > 0 ) {
+				display_error_messages();
+			} else {
+				unset($_POST['confirm_password']);
+				$send_email = isset($_POST['send_email']) ? true : false;
+				unset($_POST['send_email']);
+				$_POST['user_password'] = encrypt_data($_POST['user_password']);
+				$user = $_POST;
+				$this->__globalmodule->set_tablename('users');
+				if ($this->__globalmodule->_update($id, $_POST)) {
+					add_modal_before_content("<h3>Info</h3>");
+					add_modal_content('<p>User "' . $user['user_login'] . '\'s" login details was updated."</p>');
+					if ($send_email) {
+						$this->load->helper('send_email');
+						$email_temp = array(
+							'nickname' => $user['user_nickname'],
+							'user_email' => $user['user_email'],
+							'user_login' => $user['user_login'],
+							'user_password' => decrypt_data($user['user_password'])
+						);
+						$email = array(
+							'to' => $user['user_email'],
+							'subject' => 'Notification: Account Changes',
+							'message' => get_email_template('email/notify-account-changes-details', $email_temp)
+						);
+						if (send_email($email))
+							add_modal_content('<p>Login changes details was sent to "' . $user['user_email'] . '" via email."</p>');
+					}
+					display_modal_content();
+				}
+			}
+		}
+
+		$this->__globalmodule->set_tablename('users');
+		$page['user_data'] = $this->__globalmodule->get_where($id);
 		add_sidebar($this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
 		render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $page);
 	}
@@ -253,8 +330,8 @@ class _users extends MX_Controller {
 		$view = $this->page['module_name'] . 'add-user';
 		$this->page['assets_url'] = $this->assets;
 
-		if(isset($_POST['add-user'])) {
-			unset($_POST['add-user']);
+		if(isset($_POST['add_user'])) {
+			unset($_POST['add_user']);
 			if (username_exists($_POST['username'])) {
 				add_error_message("Username is already existing in our database. Please choose another.");
 			}

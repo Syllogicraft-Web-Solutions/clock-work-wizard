@@ -25,6 +25,8 @@
                               generate_date_field(ucfirst(str_replace('_', ' ', $data->meta_key)), $data->meta_key, json_decode($data->meta_value));
                          else if ($data->meta_key == 'workphone' || $data->meta_key == 'cellphone' || $data->meta_key == 'homephone')
                               generate_numberfield(ucfirst(str_replace('_', ' ', $data->meta_key)), $data->meta_key, json_decode($data->meta_value));
+                         else if ($data->meta_key == 'state')
+                              generate_countryfield(ucfirst(str_replace('_', ' ', $data->meta_key)), $data->meta_key, json_decode($data->meta_value));
                          else if ($data->meta_key == 'user_role') {
                               if (get_user_role(get_current_user_id()) == 'admin')
                                    generate_textfield(ucfirst(str_replace('_', ' ', $data->meta_key)), $data->meta_key, json_decode($data->meta_value));

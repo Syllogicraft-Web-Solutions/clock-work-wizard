@@ -6,7 +6,8 @@ $config['exceptions']['classes'] = array(
     '_login',
     '_default',
     '_public',
-    '_error'
+    '_error',
+    '_api'
 );
 
 $config['exceptions']['methods'] = array(
