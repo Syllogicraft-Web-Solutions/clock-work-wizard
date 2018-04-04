@@ -12,14 +12,22 @@
 
      if ($_SERVER['HTTP_HOST'] != 'localhost' && explode('.', $_SERVER['HTTP_HOST'])[0] != '192') {
           $url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/';
-          if ($environment == 'development')
-               $url .= 'dev/';
-          // exit($url);
-          $url = $url;
-          $host = 'sql303.epizy.com';
-          $username = 'epiz_21585450';
-          $password = 'syllogicraft123';
-          $database_name = 'epiz_21585450_cww';
+          //if ($environment == 'development')
+          //     $url .= 'dev/';
+          //exit($url);
+          if (explode('.', $_SERVER['HTTP_HOST'])[0] == 'syllogicraft') {
+	          $url = $url;
+	          $host = 'sql303.epizy.com';
+	          $username = 'epiz_21585450';
+	          $password = 'syllogicraft123';
+	          $database_name = 'epiz_21585450_cww';
+	  } else if (explode('.', $_SERVER['HTTP_HOST'])[0] == 'jitsemt') {
+	          $url = $url;
+	          $host = 'localhost';
+	          $username = 'cww_admin';
+	          $password = 'syllogicraft12399';
+	          $database_name = 'cww';
+	  }
      } 
      define('BASE_URL', $url);
      // DB Settings here
