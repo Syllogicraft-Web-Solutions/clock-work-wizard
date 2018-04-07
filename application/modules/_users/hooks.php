@@ -108,3 +108,4 @@ if (is_logged_in()) {
      if (get_user_role(get_current_user_id()) == 'admin' || get_user_role(get_current_user_id()) == 'manager')
           add_action('users.index.do_content', 'list_users');
 }
+

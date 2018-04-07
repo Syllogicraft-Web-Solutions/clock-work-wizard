@@ -1,6 +1,11 @@
 
 <div class="w3-container w3-padding">
      <h2>Clocker</h2>
+<div class="clocker-button-links w3-margin">
+     <?php
+          do_action('clocker.mdl.button-links');
+     ?>
+</div>
 <?php
      // do_action('clocker.clock');
      // do_action('clocker.display_buttons');

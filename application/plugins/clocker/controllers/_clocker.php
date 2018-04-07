@@ -67,4 +67,38 @@ class _clocker extends MX_Controller {
             echo json_encode(false);
     }
 
+    public function verification() {
+        $view = $this->page['module_name'] . 'components/list-users.php';
+
+        $this->page['assets_url'] = $this->assets;
+        $this->page['data'] = array();
+        
+		add_sidebar('_' . $this->page['module_name'], true, array('width' => '50px', 'text_align' => 'center'));
+        render_page(false, $this->page['page_title'], $this->script_tags, $this->link_tags, $this->meta_tags, $view, $this->page);
+    }
+
+    public function verify() {
+        if (isset($_GET['rec_id']) && $_GET['rec_id'] != '') {
+            $data['status'] = 'verified';
+            $this->__globalmodule->set_tablename('clocker_records');
+            if ($this->__globalmodule->_update($_GET['rec_id'], $data))
+                echo json_encode(true);
+            else
+                echo json_encode(false);
+        } else
+            echo json_encode('s');
+    }
+
+    public function unverify() {
+        if (isset($_GET['rec_id']) && $_GET['rec_id'] != '') {
+            $data['status'] = 'pending';
+            $this->__globalmodule->set_tablename('clocker_records');
+            if ($this->__globalmodule->_update($_GET['rec_id'], $data))
+                echo json_encode(true);
+            else
+                echo json_encode(false);
+        } else
+            echo json_encode('s');
+    }
+
  }

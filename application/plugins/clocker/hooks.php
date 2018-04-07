@@ -40,6 +40,17 @@ function remove_clocker_status_on_edit_profile($data) {
 }
 add_action('users.edit_profile.filter_meta_key.remove_meta', 'remove_clocker_status_on_edit_profile');
 
+function pre_add_button_links() {
+     ?>
+          <a href="<?= base_url('mdl/clocker/verification') ?>" class="w3-button w3-theme-action w3-hover-theme">Verify</a>
+     <?php
+}
+add_action('clocker.mdl.button-links', 'pre_add_button_links');
+
+function add_attendance_sheet_widget() {
+     
+}
+
 
 /** Don't remove this */
 // require_once(__DIR__ . '/hook-functions.php');

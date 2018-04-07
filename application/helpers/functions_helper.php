@@ -191,13 +191,14 @@ function add_header_menu($position = false) {
 
 }
 
-function render_widget($id = '', $class = '', $title = '', $content = '', $footer = '') {
+function render_widget($id = '', $class = '', $title = '', $content = '', $footer = '', $data_params = NULL) {
     $data['id'] = $id;
     //display_widgets_dashboard
     $data['class'] = $class;
     $data['content'] = $content;
     $data['widget_title'] = $title;
     $data['widget_footer'] = $footer;
+    $data['passed_data'] = $data_params;
 
     echo render_blank('components/widget', $data, TRUE);
 }
